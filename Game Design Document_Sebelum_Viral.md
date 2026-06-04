@@ -38,7 +38,7 @@ Membuat game edukasi literasi digital yang terasa dekat dengan kehidupan siswa I
 ### 2.3 Unique Selling Point
 
 1. **Evidence Graph System**: pemain menghubungkan bukti sebagai node dan edge pada detective board untuk menemukan korelasi atau kontradiksi.
-2. **Real-time Contradiction Detection**: pemain dapat menyandingkan ucapan NPC dengan bukti yang dimiliki untuk membuka opsi konfrontasi.
+2. **Claim-Evidence Inspection**: pemain dapat menyandingkan klaim penting dari NPC dengan bukti yang dimiliki untuk membuka opsi konfrontasi.
 3. **Narasi lokal Indonesia**: konflik disinformasi dikemas melalui pemilihan OSIS, mading sekolah, akun anonim, chat kelas, dan dinamika sosial siswa.
 4. **Refleksi pembelajaran**: game menutup setiap chapter dengan rangkuman keputusan, bukti penting, dan konsep literasi digital yang dipelajari.
 
@@ -95,7 +95,37 @@ Bagaimana pemain memilah informasi benar, setengah benar, dan palsu di tengah te
 
 ## 5. Scope Produksi
 
-### 5.1 Fitur Inti yang Dikembangkan
+### 5.0 Strategi MVP / Vertical Slice
+
+Target produksi LIDM adalah membuat **Chapter 1 playable secara utuh dan polished** sebagai vertical slice. Vertical slice ini harus membuktikan bahwa core loop game bekerja dari awal sampai akhir: pemain menerima rumor, mengumpulkan evidence, menghubungkan evidence pada detective board, menemukan minimal satu kontradiksi, melakukan satu konfrontasi berbasis bukti, mengambil keputusan editorial, lalu membaca refleksi pembelajaran.
+
+Chapter 2-5 tetap dirancang sebagai roadmap naratif dan bukti skalabilitas konsep, tetapi tidak menjadi syarat MVP. Strategi ini dipilih agar tim dapat memaksimalkan kualitas demo, kejelasan edukasi, dan validasi pengguna pada satu pengalaman yang selesai, bukan menyebar tenaga pada banyak chapter yang belum matang.
+
+| Lapisan Produk | Target | Status Produksi |
+|---|---|---|
+| MVP LIDM | Chapter 1 lengkap, core loop selesai, dapat diuji ke siswa. | Wajib selesai |
+| Expansion Content | Chapter 2-5, variasi kasus, ending final. | Dirancang, tidak wajib playable |
+| Platform Roadmap | Dashboard guru, cloud save, authoring tool, AI reflection, mode kolaboratif. | Pasca-MVP |
+
+### 5.0.1 Signature Demo Moment
+
+Signature moment **Sebelum Viral** terjadi ketika pemain menghubungkan dua evidence pada detective board dan menemukan bahwa klaim viral bertentangan dengan bukti waktu, sumber, atau konteks. Momen ini mengubah literasi digital yang abstrak menjadi aksi visual: pemain tidak hanya diberi tahu untuk memverifikasi, tetapi melakukan proses verifikasi itu sendiri.
+
+Pada MVP Chapter 1, signature moment terjadi melalui koneksi:
+
+| Evidence A | Evidence B | Output | Dampak |
+|---|---|---|---|
+| EV_CH1_002 Story Anonim Aldi | EV_CH1_009 Jadwal Latihan Basket | Kontradiksi Waktu dan Lokasi | Membuka jalur konfrontasi dan memperkuat keputusan editorial hati-hati. |
+
+Semua fitur MVP harus mendukung signature moment ini:
+
+1. Evidence ada agar board memiliki node bermakna.
+2. Rules ada agar board dapat menemukan kontradiksi.
+3. Konfrontasi ada agar kontradiksi memiliki konsekuensi naratif.
+4. Keputusan editorial ada agar kontradiksi berubah menjadi tindakan etis.
+5. Refleksi ada agar transfer pembelajaran menjadi eksplisit.
+
+### 5.1 Fitur Inti MVP yang Dikembangkan
 
 | Fitur | Status | Catatan |
 |---|---|---|
@@ -103,12 +133,12 @@ Bagaimana pemain memilah informasi benar, setengah benar, dan palsu di tengah te
 | Evidence inventory | Prioritas utama | Menyimpan bukti yang dikumpulkan pemain. |
 | Detective board | Prioritas utama | Board berbasis node dan edge untuk menghubungkan bukti. |
 | Evidence Graph System | Prioritas utama | Validasi hubungan antar bukti menggunakan tag dan rules. |
-| Real-time Contradiction Detection | Prioritas utama | Menyandingkan dialog NPC dengan evidence. |
+| Claim-Evidence Inspection | Prioritas utama | Menyandingkan klaim NPC dengan evidence terpilih. |
 | Konfrontasi NPC | Prioritas utama | Membuka dialog khusus jika bukti relevan/kontradiktif. |
 | Refleksi akhir chapter | Prioritas utama | Ringkasan keputusan dan konsep pembelajaran. |
 | Save lokal | Prioritas utama | LocalStorage atau IndexedDB. |
 
-### 5.2 Fitur Lanjutan
+### 5.2 Fitur Lanjutan / Roadmap
 
 | Fitur | Catatan |
 |---|---|
@@ -156,7 +186,7 @@ Baca narasi → Terima rumor/klaim → Kumpulkan evidence → Analisis evidence 
 
 ### 7.2 Fokus Implementasi Awal
 
-Untuk produksi awal, tim fokus membuat **Chapter 1–3 dapat dimainkan secara utuh**. Chapter 4–5 dapat disiapkan sebagai naskah lanjut atau konten ekspansi jika waktu produksi memungkinkan.
+Untuk produksi awal, tim fokus membuat **Chapter 1 dapat dimainkan secara utuh sebagai vertical slice**. Chapter 2–5 disiapkan sebagai rancangan naratif, evidence outline, dan roadmap ekspansi agar proposal tetap menunjukkan arah produk jangka panjang tanpa membebani MVP.
 
 ---
 
@@ -164,7 +194,15 @@ Untuk produksi awal, tim fokus membuat **Chapter 1–3 dapat dimainkan secara ut
 
 ### 8.1 Tujuan Chapter
 
-Mengenalkan pemain pada dunia game, tugas sebagai reporter mading, rumor pertama dari akun anonim, serta mekanik dasar: membaca dialog, mengumpulkan evidence, membuka inventory, dan membuat koneksi awal di detective board.
+Mengenalkan pemain pada dampak sosial rumor viral, tugas sebagai reporter mading, rumor pertama dari akun anonim, serta mekanik dasar: membaca dialog, mengumpulkan evidence, membuka inventory, membuat koneksi awal di detective board, dan mengambil keputusan editorial berbasis bukti.
+
+Chapter 1 dibuka dengan struktur hybrid:
+
+```text
+Cold Open: Setelah Viral -> Title Card: Sebelum Viral / 24 jam sebelumnya -> Rumor Hook -> Investigasi
+```
+
+Cold open harus terasa realistis untuk lingkungan sekolah. Aldi terlihat terdampak oleh rumor: siswa berbisik, poster kampanye dipertanyakan, dan suasana pemilihan OSIS menjadi tegang. Namun tone tidak boleh melodramatis atau menghukum; fokusnya adalah menunjukkan bahwa satu klaim yang menyebar tanpa verifikasi dapat merusak kepercayaan sosial.
 
 ### 8.2 Tujuan Pembelajaran
 
@@ -179,22 +217,89 @@ Setelah menyelesaikan chapter ini, pemain diharapkan mampu:
 
 | Scene ID | Nama Scene | Lokasi | Tujuan Scene | Evidence Unlock |
 |---|---|---|---|---|
-| CH1_S01 | Brief Redaksi | Ruang mading | Lala memberi tugas pertama kepada pemain. | EV_CH1_001 |
+| CH1_S00 | Setelah Viral | Koridor sekolah | Cold open menunjukkan dampak rumor terhadap Aldi dan iklim sekolah. | - |
+| CH1_S01 | 24 Jam Sebelumnya | Title card / ruang mading | Rewind ke awal kasus dan tugas mading. | EV_CH1_001 |
 | CH1_S02 | Story Viral | Overlay smartphone | Pemain membaca unggahan @suarakelas12. | EV_CH1_002 |
 | CH1_S03 | Chat Kelas XI-B | Overlay WhatsApp | Pemain melihat rumor menyebar di grup kelas. | EV_CH1_003 |
-| CH1_S04 | Wawancara Aldi | Koridor sekolah | Aldi memberi klarifikasi awal. | EV_CH1_004 |
+| CH1_S04 | Wawancara Aldi | Koridor sekolah | Aldi memberi klarifikasi awal dan terlihat tertekan. | EV_CH1_004 |
 | CH1_S05 | Arsip OSIS | Ruang OSIS | Pemain melihat jadwal dan dokumen kegiatan OSIS. | EV_CH1_005, EV_CH1_006 |
-| CH1_S06 | Detective Board Tutorial | Mode inspeksi | Pemain menghubungkan bukti pertama. | - |
-| CH1_S07 | Keputusan Editorial | Ruang mading | Pemain memilih sikap: terbitkan, tunda, atau investigasi lanjut. | - |
-| CH1_S08 | Refleksi Chapter | Halaman refleksi | Sistem merangkum keputusan dan konsep belajar. | Reflection CH1 |
+| CH1_S06 | Detective Board Tutorial | Mode inspeksi | Pemain menghubungkan bukti dan menemukan contradiction path utama. | - |
+| CH1_S07 | Konfrontasi Aldi | Koridor / ruang mading | Pemain dapat memakai contradiction evidence untuk meminta klarifikasi. | - |
+| CH1_S08 | Keputusan Editorial | Ruang mading | Pemain memilih bentuk publikasi mading/digital mading. | - |
+| CH1_S09 | Refleksi Chapter | Debrief + halaman refleksi | Sistem merangkum keputusan, evidence, dan konsep belajar. | Reflection CH1 |
 
-### 8.4 Keputusan Akhir Chapter 1
+### 8.4 Keputusan Editorial Chapter 1
 
-| Pilihan | Dampak Naratif | Dampak State |
+Keputusan akhir Chapter 1 dibingkai sebagai keputusan redaksi: apa yang harus dipublikasikan oleh mading sekolah dan digital mading sebelum rumor menyebar lebih jauh?
+
+| Pilihan | Dampak Naratif | Catatan Sistem |
 |---|---|---|
-| Terbitkan cepat | Rumor makin ramai, reputasi awal naik tetapi risiko akurasi rendah. | reputation +5, caution -5, accuracy_flag rendah |
-| Tunda publikasi | Lala kecewa, tetapi kualitas investigasi lebih baik. | caution +8, trust_lala -2, credibility +5 |
-| Investigasi lanjut | Membuka jalur evidence tambahan. | curiosity +8, unlock CH2 evidence lead |
+| Terbitkan cepat: "Aldi Diduga Pakai Dana OSIS" | Mading mendapat perhatian, tetapi rumor makin kuat dan Aldi makin dirugikan. | Failure outcome jika berbasis evidence lemah. |
+| Tunda semua publikasi | Mading tidak ikut memperparah rumor, tetapi ruang informasi tetap dikuasai spekulasi siswa. | Partial outcome; aman tetapi kurang aktif. |
+| Terbitkan klarifikasi sementara: "Yang Sudah Terverifikasi dan Yang Masih Perlu Dicek" | Informasi menjadi lebih akurat, tuduhan terhadap Aldi tidak diperkuat, dan isu dana tetap dibuka untuk klarifikasi lanjut. | Strong outcome jika contradiction path ditemukan. |
+| Buat imbauan digital: "Jangan Sebar Tuduhan Tanpa Konteks" | Rumor sedikit melambat, tetapi isu utama belum dijelaskan secara kuat. | Partial outcome; cocok jika evidence belum lengkap. |
+
+Pilihan ideal adalah klarifikasi sementara, bukan diam total. Artikel ideal tidak menyatakan "Aldi pasti bersih", tetapi memisahkan hal yang sudah terbukti dari hal yang masih perlu diverifikasi:
+
+```text
+Belum ada bukti bahwa Aldi memakai dana OSIS untuk kepentingan pribadi. Namun, pencatatan dana kampanye masih perlu diklarifikasi oleh panitia.
+```
+
+Jika key contradiction ditemukan, klarifikasi memuat bantahan waktu/lokasi dan lebih efektif meredam rumor. Jika key contradiction belum ditemukan, klarifikasi tetap mungkin dipilih tetapi hasilnya lebih lemah dan refleksi menunjukkan reasoning gap.
+
+### 8.4.1 Outcome Tiers Chapter 1
+
+| Outcome | Kondisi | Dampak |
+|---|---|---|
+| Strong Outcome | Pemain menemukan key contradiction, tidak overclaim, dan menerbitkan klarifikasi hati-hati. | Rumor spread menurun, trust Aldi membaik, kredibilitas mading naik. |
+| Partial Outcome | Pemain sadar rumor lemah tetapi tidak menemukan contradiction path utama. | Publikasi lebih aman tetapi terlalu umum; rumor hanya melambat sedikit. |
+| Failure Outcome | Pemain menerbitkan cepat berbasis story viral, chat, atau komentar siswa. | Mading mendapat perhatian, tetapi rumor menyebar dan Aldi dirugikan. |
+| Wrong Confrontation | Pemain menekan Aldi dengan hearsay atau evidence tidak relevan. | Aldi defensif, trust turun, dan refleksi menjelaskan beda hearsay vs evidence. |
+
+Chapter 1 tidak memiliki game-over. Semua outcome harus selesai sampai refleksi.
+
+### 8.5 Truth Table Chapter 1
+
+Truth table digunakan sebagai pegangan internal tim agar narasi, evidence, rules, dan refleksi tidak saling bertentangan.
+
+| Elemen Kasus | Kebenaran Internal | Fungsi Pembelajaran |
+|---|---|---|
+| Ada selisih kas kegiatan OSIS | Benar, tetapi penyebabnya belum jelas pada awal chapter. | Fakta benar belum otomatis membuktikan tuduhan viral. |
+| Aldi memakai dana OSIS untuk acara pribadi | Tidak terbukti pada Chapter 1. Evidence waktu/lokasi melemahkan tuduhan ini. | Pemain belajar membedakan klaim, bukti, dan kesimpulan. |
+| Aldi ceroboh dalam administrasi kampanye | Benar dalam skala kecil: Aldi kurang rapi mengecek dokumentasi/rekap pengeluaran tim. | Pemain belajar bahwa kesalahan kecil tidak boleh dilebarkan menjadi tuduhan besar tanpa bukti. |
+| Story @suarakelas12 dapat dipercaya | Kredibilitas rendah karena anonim dan tidak memberi konteks. | Pemain mengenali red flag sumber anonim. |
+| Chat kelas membuktikan rumor | Tidak. Chat hanya membuktikan rumor menyebar. | Pemain belajar membedakan penyebaran informasi dari kebenaran informasi. |
+| Maya punya akses ke laporan kas | Benar dan menjadi lead ringan untuk investigasi lanjut, bukan bukti kesalahan. | Pemain belajar mencari lead tanpa langsung memindahkan tuduhan ke orang lain. |
+
+### 8.5.1 Truth Nuance Chapter 1
+
+Chapter 1 membuktikan bahwa tuduhan viral terhadap Aldi overclaim dan mengarah ke kesimpulan yang salah. Namun Chapter 1 tidak menutup kasus dana OSIS. Kebenaran internal yang ingin dicapai:
+
+1. Aldi tidak terbukti memakai dana OSIS untuk kepentingan pribadi.
+2. Ada masalah nyata pada pencatatan dana kampanye.
+3. Aldi punya kelalaian administratif kecil, tetapi bukan bukti penyalahgunaan dana.
+4. Maya muncul sebagai lead karena memiliki akses ke laporan kas, tetapi pemain tidak boleh diarahkan untuk langsung menuduh Maya.
+5. Keputusan editorial terbaik harus menyatakan batas pengetahuan dengan jelas.
+
+### 8.6 Pemetaan Gameplay ke Literasi Digital
+
+| Momen Gameplay | Skill Literasi Digital | Bukti Belajar |
+|---|---|---|
+| Membaca story anonim | Mengenali red flags sumber | Pemain tidak langsung menyimpulkan dari akun anonim. |
+| Membandingkan story dengan jadwal basket | Verifikasi waktu dan lokasi | Pemain menemukan kontradiksi terhadap tuduhan Aldi. |
+| Menghubungkan rekap dana dan catatan bendahara | Source triangulation | Pemain melihat bahwa selisih kas perlu konteks tambahan. |
+| Mengonfrontasi NPC dengan evidence relevan | Evidence-based questioning | Pemain membuka respons khusus tanpa asal menuduh. |
+| Memilih keputusan editorial | Etika publikasi digital | Pemain mempertimbangkan dampak sosial sebelum menyebarkan informasi. |
+
+### 8.7 Reasoning Funnel Chapter 1
+
+Chapter 1 tidak dirancang sebagai puzzle "temukan semua link". Chapter ini adalah reasoning funnel:
+
+1. Pemain melihat tuduhan viral.
+2. Pemain belajar bahwa popularitas rumor bukan bukti.
+3. Pemain menemukan bahwa selisih dana adalah fakta nyata tetapi belum lengkap.
+4. Pemain menemukan satu contradiction path yang melemahkan tuduhan terhadap Aldi.
+5. Pemain memakai contradiction path secara bertanggung jawab dalam konfrontasi dan keputusan editorial.
 
 ---
 
@@ -216,7 +321,7 @@ Setelah menyelesaikan chapter ini, pemain diharapkan mampu:
 | Nama | Peran | Kepribadian | Fungsi Cerita | Ekspresi Dibutuhkan |
 |---|---|---|---|---|
 | Nala | Pemain/reporter junior | Dapat dibentuk pemain | Protagonis dan pengambil keputusan | neutral, curious, worried, determined |
-| Lala Pradipta | Senior mading | Ambisius, cepat, mengejar scoop | Mentor sekaligus tekanan editorial | neutral, excited, serious, annoyed |
+| Lala Pradipta | Senior mading | Ambisius, cepat, tetapi peduli kredibilitas | Ambitious mentor under pressure; sumber tekanan sekaligus guidance | neutral, excited, serious, annoyed |
 | Aldi Pratama | Kandidat OSIS | Populer, ceroboh, karismatik | Target tuduhan pertama | neutral, confident, confused, defensive |
 | Bintang Maulana | Kandidat OSIS | Pendiam, cerdas, sistematis | Target tuduhan berbasis half-truth | neutral, anxious, calm, hurt |
 | Citra Anggraini | Kandidat OSIS | Tegas, vokal, berintegritas | Target tuduhan berbasis fabrication | neutral, angry, focused, tired |
@@ -232,6 +337,18 @@ Setelah menyelesaikan chapter ini, pemain diharapkan mampu:
 | Maya Larasati | Menutupi penyalahgunaan kas OSIS | Aldi | Misdirection | Sekitar 30% |
 | Reza Aditya | Membela kakak yang merasa dirugikan | Bintang | Half-truth | Sekitar 60% |
 
+### 9.4 Catatan Arc Lala Chapter 1
+
+Lala adalah senior editor yang ingin mading tetap relevan selama pemilihan OSIS. Ia merasa tertekan untuk bergerak cepat sebelum media sosial siswa menguasai narasi, tetapi ia tetap peduli pada kredibilitas. Tensi utama Lala adalah **speed vs accuracy**.
+
+| Momen | Peran Lala | Contoh Fungsi Dialog |
+|---|---|---|
+| Opening | Mendorong kecepatan | "Kalau kita telat, semua orang udah percaya versi akun anonim itu." |
+| Mid-investigation | Menantang alasan pemain | "Kalau kamu bilang jangan publish dulu, bukti apa yang cukup kuat buat nahan?" |
+| Detective board | Memberi hint diegetic | "Tuduhannya spesifik soal jam dan tempat. Coba cari bukti yang juga spesifik." |
+| Setelah kontradiksi | Mengakui kekuatan evidence | "Oke. Ini bukan sekadar belum pasti. Ada bagian tuduhan yang bertabrakan." |
+| Final decision | Mendorong aksi bertanggung jawab | "Berarti kita diam aja, atau kita tulis dengan batas yang jelas?" |
+
 ---
 
 ## 10. State dan Variabel Game
@@ -244,6 +361,8 @@ Setelah menyelesaikan chapter ini, pemain diharapkan mampu:
 | caution_score | number | 0–100 | Mewakili kehati-hatian pemain sebelum mengambil keputusan. |
 | reputation | number | 0–100 | Reputasi pemain sebagai reporter mading. |
 | credibility_score | number | 0–100 | Kualitas keputusan editorial pemain. |
+| rumor_spread | number | 0–100 | Tingkat penyebaran rumor pada lingkungan sekolah. |
+| evidence_quality | number | 0–100 | Kekuatan reasoning berdasarkan evidence yang ditemukan dan digunakan. |
 | evidence_collected | array | evidence_id[] | Daftar bukti yang sudah dikumpulkan. |
 | choice_history | array | choice_id[] | Riwayat pilihan penting pemain. |
 | confronted_npcs | array | character_id[] | NPC yang sudah dikonfrontasi. |
@@ -260,6 +379,29 @@ Setelah menyelesaikan chapter ini, pemain diharapkan mampu:
 | trust_citra | Citra | Menentukan akses ke gerakan Ruang Aman. |
 | trust_rendra | Rendra | Menentukan akses ke arsip OSIS. |
 | trust_pak_ardi | Pak Ardi | Menentukan legitimasi investigasi. |
+
+### 10.3 Feedback and Scoring Philosophy
+
+**Sebelum Viral** menggunakan hybrid-hidden scoring. Sistem tetap melacak state internal untuk branching, konsekuensi, dan refleksi, tetapi pemain tidak melihat perubahan angka mentah selama gameplay.
+
+Tujuannya adalah mencegah pemain mengejar angka seperti `credibility +5` atau `trust -3`. Fokus pemain harus tetap pada reasoning berbasis evidence.
+
+Feedback yang terlihat oleh pemain:
+
+1. Label hubungan evidence: Korelasi, Kontradiksi, Perlu Konteks, Tidak Relevan.
+2. Perubahan tone dialog dan respons karakter.
+3. Konsekuensi naratif pada keputusan editorial.
+4. Ringkasan kualitatif pada refleksi akhir chapter.
+
+Contoh refleksi tidak menampilkan angka, tetapi kategori:
+
+| Kategori | Contoh Output |
+|---|---|
+| Sikap Editorial | Hati-hati dan berbasis bukti |
+| Kualitas Verifikasi | Kuat |
+| Risiko Penyebaran Rumor | Menurun |
+| Evidence Kunci | Jadwal Latihan Basket |
+| Evidence Terlewat | Pesan Maya ke Panitia |
 
 ---
 
@@ -349,6 +491,23 @@ Setiap evidence harus memiliki:
 | CH1_RULE_004 | EV_CH1_003 | EV_CH1_008 | Korelasi lemah | Chat dan komentar menunjukkan penyebaran rumor, bukan kebenaran rumor. |
 | CH1_RULE_005 | EV_CH1_006 | EV_CH1_010 | Korelasi | Maya punya akses dan aktivitas terkait laporan kas. |
 
+### 12.4 Board Structure Chapter 1
+
+Chapter 1 memakai struktur **one required contradiction path + optional insight paths**. Pemain tidak harus menemukan semua koneksi untuk menyelesaikan chapter, tetapi signature contradiction harus menjadi jalur utama menuju outcome terbaik.
+
+| Jalur | Evidence Pair | Output | Insight |
+|---|---|---|---|
+| Required contradiction | EV_CH1_002 + EV_CH1_009 | Kontradiksi Waktu dan Lokasi | Aldi tidak berada di ruang OSIS pada waktu transaksi yang dituduhkan. |
+| Optional insight 1 | EV_CH1_003 + EV_CH1_008 | Korelasi Lemah | Banyak orang mengulang rumor yang sama, tetapi pengulangan bukan bukti kebenaran. |
+| Optional insight 2 | EV_CH1_005 + EV_CH1_006 | Perlu Konteks / Korelasi | Ada selisih dana, tetapi catatan bendahara menunjukkan kemungkinan penjelasan administratif yang perlu diverifikasi. |
+| Optional lead | EV_CH1_006 + EV_CH1_010 | Korelasi / Lead Baru | Maya memiliki akses ke laporan kas, tetapi ini belum membuktikan kesalahan. |
+
+Goal prompt pada board Chapter 1:
+
+```text
+Cari apakah tuduhan terhadap Aldi didukung, bertentangan, atau masih perlu konteks.
+```
+
 ---
 
 ## 13. Mekanik Utama
@@ -393,6 +552,18 @@ Komponen evidence card:
 
 **Fungsi:** Area utama untuk mengorganisir dan menghubungkan bukti.
 
+Chapter 1 menggunakan guided puzzle-board agar learning clarity dan demo reliability terjaga. Pemain tetap bebas memilih koneksi evidence, tetapi jumlah evidence, task prompt, dan hint dikurasi agar contradiction moment dapat ditemukan dalam sesi pendek.
+
+Model progression board:
+
+| Chapter | Model Board | Catatan |
+|---|---|---|
+| Chapter 1 | Guided board | Evidence terbatas, goal eksplisit, hint tersedia. |
+| Chapter 2 | Semi-guided board | Lebih banyak distractor dan konteks screenshot. |
+| Chapter 3 | Semi-freeform board | Beberapa jalur koneksi valid. |
+| Chapter 4 | Freeform investigation board | Evidence menyesatkan dan teori bersaing. |
+| Chapter 5 | Synthesis board | Pemain menyusun argumen editorial akhir. |
+
 Interaksi:
 
 1. Pemain menyeret evidence ke board.
@@ -401,9 +572,29 @@ Interaksi:
 4. Sistem mengevaluasi hubungan berdasarkan tag dan rules.
 5. Edge diberi label: korelasi, kontradiksi, tidak relevan, atau perlu konteks.
 
-### 13.4 Real-time Conversation Inspection
+### 13.3.1 Hint and Guidance System
 
-**Fungsi:** Pemain dapat memeriksa ucapan NPC saat dialog berlangsung.
+Chapter 1 memakai guidance diegetic dan UI nudge, bukan tombol hint besar sebagai mekanik utama. Lala dapat memberi komentar ketika pemain tampak buntu, tetapi hint harus mengarahkan proses berpikir, bukan membocorkan jawaban.
+
+Contoh hint Lala:
+
+```text
+Nala, tuduhan itu nyebut jam kejadian, kan? Ada bukti lain yang punya waktu spesifik?
+```
+
+Board juga dapat memberi nudge visual dengan menyorot shared tags seperti entity, time, location, dan source.
+
+Hint escalation:
+
+| Level | Bentuk Hint | Contoh |
+|---|---|---|
+| Soft | Mengingatkan kategori tag | "Coba cek waktu dan tempat pada klaim." |
+| Medium | Highlight evidence dengan tag serupa | Evidence yang sama-sama menyebut Aldi atau jam transaksi diberi glow ringan. |
+| Strong | Menyarankan kategori perbandingan spesifik | "Bandingkan klaim lokasi pada story dengan bukti aktivitas Aldi." |
+
+### 13.4 Claim-Evidence Inspection
+
+**Fungsi:** Pemain dapat memeriksa klaim penting dari NPC dengan evidence yang sudah dikumpulkan.
 
 Interaksi:
 
@@ -430,13 +621,31 @@ Kemungkinan respons NPC:
 
 **Fungsi:** Memberi feedback pembelajaran setelah chapter selesai.
 
-Isi refleksi:
+Refleksi memakai format hybrid: editorial debrief singkat terlebih dahulu, lalu learning summary terstruktur.
+
+1. **Editorial Debrief**  
+   Adegan pendek di ruang mading. Lala dan Nala meninjau keputusan editorial, konsekuensi rumor, dan batas klaim yang boleh ditulis.
+
+2. **Learning Summary**  
+   Panel ringkas yang menjelaskan reasoning pemain secara eksplisit.
+
+Isi learning summary:
 
 - Keputusan utama pemain
 - Bukti yang dikumpulkan
 - Bukti penting yang terlewat
 - Konsep literasi digital yang relevan
 - Saran perilaku digital di dunia nyata
+- Sikap editorial
+- Kualitas verifikasi
+- Risiko penyebaran rumor
+
+Contoh editorial debrief:
+
+```text
+Lala menatap draft artikel di layar.
+"Kalimat ini penting. Kita nggak bilang Aldi bersih total. Kita bilang tuduhan itu belum terbukti, dan ada bagian yang bertentangan."
+```
 
 ---
 
@@ -448,13 +657,29 @@ Pilihan tidak selalu “benar” atau “salah”. Setiap pilihan memiliki trade
 
 ### 14.2 Contoh Pilihan
 
-| Choice ID | Teks Pilihan | Efek State | Dampak Naratif |
+Catatan: efek state pada tabel ini adalah internal dan tidak ditampilkan sebagai angka kepada pemain.
+
+| Choice ID | Teks Pilihan | Efek State Internal | Dampak Naratif |
 |---|---|---|---|
-| CH1_C001 | “Kita cek sumbernya dulu.” | caution +5, curiosity +3 | Lala menganggap pemain lambat, tetapi investigasi lebih kuat. |
-| CH1_C002 | “Kalau sudah viral, kita harus cepat tulis.” | reputation +3, caution -5 | Berita cepat naik, tetapi risiko salah meningkat. |
-| CH1_C003 | “Aku mau tanya Aldi langsung.” | curiosity +6, trust_aldi +2 | Jalur wawancara terbuka. |
-| CH1_C004 | “Postingan anonim belum cukup.” | credibility +5 | Pemain mendapat refleksi positif. |
-| CH1_C005 | “Komentar siswa sudah cukup jadi bukti.” | credibility -5 | Sistem menunjukkan feedback tentang hearsay. |
+| CH1_C001 | “Kita cek sumbernya dulu.” | Internal: caution/curiosity naik | Lala menganggap pemain lambat, tetapi investigasi lebih kuat. |
+| CH1_C002 | “Kalau sudah viral, kita harus cepat tulis.” | Internal: attention naik, credibility turun | Berita cepat naik, tetapi risiko salah meningkat. |
+| CH1_C003 | “Aku mau tanya Aldi langsung.” | Internal: curiosity dan trust Aldi naik jika dilakukan sopan | Jalur wawancara terbuka. |
+| CH1_C004 | “Postingan anonim belum cukup.” | Internal: credibility naik | Pemain mendapat refleksi positif tentang sumber anonim. |
+| CH1_C005 | “Komentar siswa sudah cukup jadi bukti.” | Internal: evidence_quality turun | Sistem menunjukkan feedback tentang hearsay. |
+
+### 14.3 Failure Philosophy
+
+Chapter 1 mengizinkan meaningful failure tanpa dead end. Poor reasoning menghasilkan konsekuensi naratif dan reflektif, bukan game-over.
+
+Pemain dapat:
+
+1. Melewatkan key contradiction.
+2. Menghubungkan evidence yang lemah.
+3. Mengonfrontasi Aldi dengan hearsay.
+4. Menerbitkan artikel terlalu cepat.
+5. Membuat klarifikasi yang terlalu umum.
+
+Dalam semua kasus, chapter tetap dapat diselesaikan. Reflection menjelaskan reasoning step mana yang kuat, lemah, atau hilang. Failure diperlakukan sebagai learning moment: game menunjukkan bagaimana misinformation menyebar ketika klaim diterima sebelum evidence diperiksa.
 
 ---
 
@@ -462,8 +687,14 @@ Pilihan tidak selalu “benar” atau “salah”. Setiap pilihan memiliki trade
 
 ### 15.1 Flow Utama
 
+Flow MVP Chapter 1:
+
 ```text
-Landing Page → Main Menu → New Game → Opening Scene → Visual Novel → Evidence Inventory → Detective Board → Conversation Inspection → NPC Confrontation → Editorial Decision → Reflection → Next Chapter
+Landing Page -> Main Menu -> New Game -> Cold Open -> 24 Jam Sebelumnya -> Rumor Hook -> Evidence Inventory -> Detective Board -> Claim-Evidence Inspection -> NPC Confrontation -> Editorial Decision -> Reflection
+```
+
+```text
+Landing Page → Main Menu → New Game → Cold Open → 24 Jam Sebelumnya → Visual Novel → Evidence Inventory → Detective Board → Claim-Evidence Inspection → NPC Confrontation → Editorial Decision → Reflection → Next Chapter
 ```
 
 ### 15.2 Layar Utama
@@ -476,7 +707,7 @@ Landing Page → Main Menu → New Game → Opening Scene → Visual Novel → E
 | Smartphone Overlay | Chat, social feed, news feed, inventory. |
 | Evidence Inventory | Daftar bukti yang dikumpulkan. |
 | Detective Board | Menghubungkan evidence node. |
-| Conversation Inspection | Menyandingkan dialog NPC dengan evidence. |
+| Claim-Evidence Inspection | Menyandingkan klaim NPC dengan evidence. |
 | Reflection Screen | Menampilkan hasil belajar chapter. |
 | Ending Screen | Menampilkan jalur keputusan dan kesimpulan akhir. |
 
@@ -699,7 +930,7 @@ src/
 | Detective board | Pemain menambahkan node evidence | Node tampil di board |
 | Edge connection | Pemain menghubungkan dua evidence | Edge tampil dan divalidasi |
 | Contradiction detection | Evidence kontradiktif dihubungkan | Sistem memberi label kontradiksi |
-| Conversation inspection | Evidence disandingkan dengan dialog NPC | Feedback sesuai/kontradiksi/tidak relevan muncul |
+| Claim-Evidence Inspection | Evidence disandingkan dengan klaim NPC | Feedback sesuai/kontradiksi/tidak relevan muncul |
 | Reflection | Chapter selesai | Halaman refleksi tampil |
 
 ### 19.2 Usability Test
@@ -751,7 +982,8 @@ Task playtest:
 
 ### 21.1 Content/Narrative
 
-- [ ] Finalisasi premis chapter 1–3
+- [ ] Finalisasi vertical slice Chapter 1
+- [ ] Susun outline roadmap Chapter 2–5
 - [ ] Tulis scene list chapter 1
 - [ ] Tulis dialog chapter 1
 - [ ] Buat choice consequence chapter 1
