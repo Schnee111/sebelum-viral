@@ -1,1 +1,4 @@
 proposal-lidm.md
+node_modules/
+dist/
+.omo/

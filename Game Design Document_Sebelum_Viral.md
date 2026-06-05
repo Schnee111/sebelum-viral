@@ -136,7 +136,7 @@ Semua fitur MVP harus mendukung signature moment ini:
 | Claim-Evidence Inspection | Prioritas utama | Menyandingkan klaim NPC dengan evidence terpilih. |
 | Konfrontasi NPC | Prioritas utama | Membuka dialog khusus jika bukti relevan/kontradiktif. |
 | Refleksi akhir chapter | Prioritas utama | Ringkasan keputusan dan konsep pembelajaran. |
-| Save lokal | Prioritas utama | LocalStorage atau IndexedDB. |
+| Save lokal | Prioritas utama | IndexedDB via `idb-keyval` atau `localforage`. |
 
 ### 5.2 Fitur Lanjutan / Roadmap
 
@@ -791,36 +791,50 @@ Gaya visual semi-modern sekolah Indonesia, dengan UI bersih, sedikit nuansa inve
 
 | Komponen | Teknologi |
 |---|---|
-| Frontend | Next.js / React |
+| Frontend MVP | Vite + React + TypeScript |
 | Styling | Tailwind CSS |
 | State Management | Zustand |
-| Detective Board | React Flow |
-| Story Data | JSON |
-| Save Lokal | LocalStorage atau IndexedDB |
-| Backend Lanjutan | Supabase |
-| Deployment | Vercel atau Netlify |
+| Detective Board | React Flow / `@xyflow/react` |
+| Story Data | JSON + TypeScript types |
+| Data Validation | Zod |
+| Save Lokal | IndexedDB via `idb-keyval` atau `localforage` |
+| Audio | Howler.js |
+| Testing | Vitest + Playwright |
+| Deployment | Vercel, Netlify, atau GitHub Pages sebagai static site |
+| Roadmap Full-stack | Next.js atau backend terpisah jika dashboard/auth dibutuhkan |
+| Backend Lanjutan | Supabase atau Laravel + database relasional |
 | Design | Figma |
 | Asset | Krita, Photoshop, Aseprite, Canva/Figma |
+
+Alasan pemilihan stack MVP:
+
+1. Game berjalan sebagai static browser app, sehingga tidak membutuhkan SSR, API routes, auth, atau database pada tahap awal.
+2. Vite memberi setup ringan dan iterasi cepat untuk tim kecil.
+3. React Flow cocok untuk signature mechanic detective board berbasis node-edge.
+4. TypeScript + Zod menjaga data JSON story/evidence/rules tetap valid.
+5. IndexedDB cukup untuk local save tanpa mengelola data pribadi siswa.
 
 ### 18.2 Arsitektur Frontend-First
 
 ```text
 Browser Client
-├── Next.js / React App
+├── Vite + React + TypeScript App
 ├── Visual Novel Layer
 ├── Smartphone Overlay
 ├── Evidence Inventory
 ├── Detective Board (React Flow)
 ├── JSON Story Engine
+├── Zod Data Validation
 ├── Tag-Matching Engine
 ├── Contradiction Rules Engine
 ├── Reflection Generator
-└── Local Save System
+├── Audio Manager (Howler.js)
+└── IndexedDB Local Save System
 
 Optional Future Service
-└── Supabase
+└── Supabase / Laravel API
     ├── Auth
-    ├── PostgreSQL Database
+    ├── Database
     ├── Storage
     └── Teacher Dashboard / Analytics
 ```
@@ -829,9 +843,11 @@ Optional Future Service
 
 ```text
 src/
-  app/
+  main.tsx
+  App.tsx
   components/
     visual-novel/
+    smartphone/
     evidence/
     detective-board/
     inspection/
@@ -846,19 +862,29 @@ src/
         evidences.json
         rules.json
         reflections.json
+  schemas/
+    storySchema.ts
+    evidenceSchema.ts
+    ruleSchema.ts
   stores/
     gameStore.ts
     evidenceStore.ts
     graphStore.ts
+    settingsStore.ts
   engines/
     storyEngine.ts
     tagMatchingEngine.ts
     contradictionEngine.ts
     reflectionEngine.ts
+    saveEngine.ts
+    audioEngine.ts
   types/
     story.ts
     evidence.ts
     gameState.ts
+  tests/
+    engines/
+    e2e/
 ```
 
 ### 18.4 Format JSON Scene
@@ -1009,7 +1035,8 @@ Task playtest:
 
 ### 21.4 Frontend
 
-- [ ] Setup Next.js + Tailwind
+- [ ] Setup Vite + React + TypeScript + Tailwind
+- [ ] Setup Zod schema untuk validasi JSON story/evidence/rules
 - [ ] Implementasi story engine sederhana
 - [ ] Implementasi visual novel screen
 - [ ] Implementasi choice system
@@ -1017,7 +1044,9 @@ Task playtest:
 - [ ] Integrasi React Flow
 - [ ] Implementasi tag-matching engine
 - [ ] Implementasi contradiction engine
-- [ ] Implementasi local save
+- [ ] Implementasi IndexedDB local save
+- [ ] Setup Vitest untuk engine tests
+- [ ] Setup Playwright untuk end-to-end MVP flow
 
 ### 21.5 Asset
 
