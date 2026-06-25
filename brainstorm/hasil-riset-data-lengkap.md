@@ -1,4 +1,4 @@
-# Hasil Riset Data — LIDM 2025 Divisi ITDP
+# Hasil Riset Data — LIDM 2026 Divisi ITDP
 
 > **Game Edukasi Critical Thinking & Deteksi Hoax** — Target: SMA ke bawah
 > **Tim**: 4 orang, Ilmu Komputer

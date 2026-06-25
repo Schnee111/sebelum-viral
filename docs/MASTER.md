@@ -7,7 +7,7 @@
 
 ## APA INI
 
-**Sebelum Viral** — game edukasi web-based buat lomba LIDM 2025 (ITDP). Visual novel naratif-investigatif. Pemain jadi reporter junior mading sekolah, selidiki rumor viral soal pemilihan ketua OSIS.
+**Sebelum Viral** — game edukasi web-based buat lomba LIDM 2026 (ITDP). Visual novel naratif-investigatif. Pemain jadi reporter junior mading sekolah, selidiki rumor viral soal pemilihan ketua OSIS.
 
 **Platform:** Web browser (mobile-first, landscape 16:9)
 **Target:** Siswa SMA/SMK/MA kelas X-XI (usia 15-17)

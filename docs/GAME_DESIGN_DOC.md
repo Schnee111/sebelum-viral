@@ -3,7 +3,7 @@
 **Version:** 1.0
 **Date:** 2025-06-14
 **Status:** Active Development
-**Competition:** LIDM 2025
+**Competition:** LIDM 2026
 
 ---
 

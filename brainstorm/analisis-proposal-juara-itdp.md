@@ -427,7 +427,7 @@ Tebakan awal (perlu diverifikasi riset):
 
 ### 5.7. Timeline 📅
 
-**Estimasi** (perlu disesuaikan dengan deadline LIDM 2025: 1 Agt–14 Sep):
+**Estimasi** (perlu disesuaikan dengan deadline LIDM 2026: 1 Agt–14 Sep):
 
 | Bulan | Milestone |
 |-------|-----------|

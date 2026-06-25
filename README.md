@@ -105,4 +105,4 @@ sebelum-viral/
 
 ## License
 
-TBD — untuk keperluan LIDM 2025.
+TBD — untuk keperluan LIDM 2026.

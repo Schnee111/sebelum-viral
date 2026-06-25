@@ -1,4 +1,4 @@
-# Target Riset Data — LIDM 2025 Divisi ITDP
+# Target Riset Data — LIDM 2026 Divisi ITDP
 
 > **Tujuan**: Mengumpulkan data yang diperlukan sebelum brainstorming dan penulisan proposal.
 > **Prinsip**: Ikuti pola proposal juara — setiap klaim harus didukung data, bukan asumsi.

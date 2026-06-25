@@ -1,4 +1,4 @@
-# Brainstorming Ide LIDM 2025 — Divisi ITDP
+# Brainstorming Ide LIDM 2026 — Divisi ITDP
 
 > Disusun: 11 Juni 2026
 > Tim: 4 orang, Ilmu Komputer

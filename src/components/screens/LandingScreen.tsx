@@ -163,7 +163,7 @@ export function LandingScreen({ hasSave, onStart, onContinue }: LandingScreenPro
               <BookOpen size={12} /> Refleksi
             </span>
           </div>
-          <p className="text-navy-600 text-xs tracking-widest uppercase">LIDM 2025 — ITDP</p>
+          <p className="text-navy-600 text-xs tracking-widest uppercase">LIDM 2026 — ITDP</p>
         </motion.div>
       </motion.div>
     </div>
