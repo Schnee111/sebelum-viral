@@ -1,43 +1,61 @@
-import localforage from "localforage";
-import type { GameProgress } from "../types/game";
+import localforage from 'localforage';
+import type { SaveData, Screen, GameProgress, BoardState } from '../types';
+import { DEFAULT_PROGRESS } from '../types';
 
-const SAVE_KEY = "sebelum-viral:chapter-one";
+const SAVE_KEY = 'sebelum-viral-save';
+const SAVE_VERSION = '1.0.0';
 
-export interface PersistedGameState {
-  screen: string;
+interface SavePayload {
+  screen: Screen;
   progress: GameProgress;
   confrontations: string[];
+  boardState?: BoardState;
 }
 
-export interface StorageAdapter {
-  getItem(key: string): Promise<string | null>;
-  setItem(key: string, value: string): Promise<void>;
-  removeItem(key: string): Promise<void>;
+export async function saveGame(data: SavePayload): Promise<void> {
+  const saveData: SaveData = {
+    version: SAVE_VERSION,
+    timestamp: Date.now(),
+    screen: data.screen,
+    progress: data.progress,
+    confrontations: data.confrontations,
+    boardState: data.boardState ?? { nodes: [], edges: [] },
+  };
+  await localforage.setItem(SAVE_KEY, saveData);
 }
 
-export const localForageStorage: StorageAdapter = {
-  async getItem(key) {
-    const value = await localforage.getItem<string>(key);
-    return value ?? null;
-  },
-  async setItem(key, value) {
-    await localforage.setItem(key, value);
-  },
-  async removeItem(key) {
-    await localforage.removeItem(key);
-  },
-};
-
-export async function saveGame(storage: StorageAdapter, state: PersistedGameState): Promise<void> {
-  await storage.setItem(SAVE_KEY, JSON.stringify(state));
+export async function loadGame(): Promise<SaveData | null> {
+  try {
+    const data = await localforage.getItem<SaveData>(SAVE_KEY);
+    if (!data) return null;
+    // Version check
+    if (data.version !== SAVE_VERSION) {
+      console.warn('Save data version mismatch, resetting');
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error('Failed to load save data:', err);
+    return null;
+  }
 }
 
-export async function loadGame(storage: StorageAdapter): Promise<PersistedGameState | null> {
-  const raw = await storage.getItem(SAVE_KEY);
-  if (!raw) return null;
-  return JSON.parse(raw) as PersistedGameState;
+export async function deleteSave(): Promise<void> {
+  await localforage.removeItem(SAVE_KEY);
 }
 
-export async function clearGame(storage: StorageAdapter): Promise<void> {
-  await storage.removeItem(SAVE_KEY);
+export async function hasSave(): Promise<boolean> {
+  const data = await loadGame();
+  return data !== null;
+}
+
+export function getDefaultSave(): SaveData {
+  return {
+    version: SAVE_VERSION,
+    timestamp: Date.now(),
+    screen: 'story',
+    progress: { ...DEFAULT_PROGRESS },
+    confrontations: [],
+    boardState: { nodes: [], edges: [] },
+  };
 }

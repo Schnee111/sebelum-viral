@@ -1,0 +1,30 @@
+#!/bin/bash
+# Character Sprite Generation Script for 'Sebelum Viral'
+# Run this when image generation API is available
+# Each prompt below should be used with the image_generate tool (portrait aspect ratio)
+
+echo "=== Character Sprite Prompts for Sebelum Viral ==="
+echo ""
+echo "1. NALA (nala_neutral.png)"
+echo "   Path: /mnt/d/project/sebelum-viral/public/assets/characters/nala/nala_neutral.png"
+echo "   Prompt: Semi-realistic anime style portrait of a 16-year-old Indonesian high school girl. Junior reporter, curious and determined. White short-sleeve school shirt with badge, dark navy skirt. Black hair, warm brown skin, brown eyes. Neutral expression, slightly curious. Cel-shaded, bust shot, white background."
+echo ""
+echo "2. LALA (lala_neutral.png)"
+echo "   Path: /mnt/d/project/sebelum-viral/public/assets/characters/lala/lala_neutral.png"
+echo "   Prompt: Semi-realistic anime style portrait of a 17-year-old Indonesian high school girl. Senior editor of school bulletin, ambitious. White short-sleeve school shirt with badge, dark navy skirt. Straight black hair, warm brown skin, sharp brown eyes. Neutral expression, slightly serious, confident. Cel-shaded, bust shot, white background."
+echo ""
+echo "3. ALDI (aldi_neutral.png)"
+echo "   Path: /mnt/d/project/sebelum-viral/public/assets/characters/aldi/aldi_neutral.png"
+echo "   Prompt: Semi-realistic anime style portrait of a 17-year-old Indonesian high school boy. OSIS candidate, popular and charismatic. White short-sleeve school shirt with badge, dark navy pants. Short neat black hair, warm brown skin, bright brown eyes. Neutral with friendly smile. Cel-shaded, bust shot, white background."
+echo ""
+echo "4. RENDRA (rendra_neutral.png)"
+echo "   Path: /mnt/d/project/sebelum-viral/public/assets/characters/rendra/rendra_neutral.png"
+echo "   Prompt: Semi-realistic anime style portrait of an 18-year-old Indonesian high school boy. Former OSIS chairman, responsible. White short-sleeve school shirt with badge, dark navy pants. Short black hair, warm brown skin, calm brown eyes. Formal upright posture, neutral calm expression. Cel-shaded, bust shot, white background."
+echo ""
+echo "5. BINTANG (bintang_neutral.png)"
+echo "   Path: /mnt/d/project/sebelum-viral/public/assets/characters/bintang/bintang_neutral.png"
+echo "   Prompt: Semi-realistic anime style portrait of a 17-year-old Indonesian high school boy. OSIS candidate, quiet and smart. White short-sleeve school shirt with badge, dark navy pants. Slightly messy black hair, glasses, warm brown skin, thoughtful brown eyes. Neutral calm expression. Cel-shaded, bust shot, white background."
+echo ""
+echo "6. CITRA (citra_neutral.png)"
+echo "   Path: /mnt/d/project/sebelum-viral/public/assets/characters/citra/citra_neutral.png"
+echo "   Prompt: Semi-realistic anime style portrait of a 17-year-old Indonesian high school girl. OSIS candidate, firm and vocal. White short-sleeve school shirt with badge, dark navy skirt. Long black hair in ponytail, warm brown skin, confident brown eyes. Neutral determined expression. Cel-shaded, bust shot, white background."

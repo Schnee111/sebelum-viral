@@ -1,84 +1,72 @@
-export type EvidenceKind = "document" | "social_post" | "chat" | "testimony" | "photo" | "social_comment";
-export type Credibility = "low" | "medium" | "high";
-export type RelationKind =
-  | "contradiction"
-  | "context_needed"
-  | "correlation"
-  | "weak_correlation"
-  | "irrelevant"
-  | "unknown";
+import type { Evidence, EvidenceRule, ClaimInspectionRule, EditorialDecision } from './evidence';
+import type { Scene } from './scene';
+import type { RelationKind } from './evidence';
 
-export interface Evidence {
-  id: string;
-  title: string;
-  kind: EvidenceKind;
-  source: string;
-  claim: string;
-  credibility: Credibility;
-  entityTags: string[];
-  timeTags: string[];
-  locationTags: string[];
-  relatedEvidenceIds: string[];
-  learningPoint: string;
-  visual: string;
+export type Screen =
+  | 'landing'
+  | 'story'
+  | 'phone'
+  | 'hub'
+  | 'board'
+  | 'inspection'
+  | 'confrontation'
+  | 'decision'
+  | 'reflection';
+
+export interface PlayerState {
+  curiosityScore: number;
+  cautionScore: number;
+  reputation: number;
+  credibilityScore: number;
+  rumorSpread: number;
+  evidenceQuality: number;
 }
 
-export interface Scene {
-  id: string;
-  title: string;
-  location: string;
-  mode: "visual_novel" | "phone" | "board" | "inspection" | "decision" | "reflection";
-  background: string;
-  unlockEvidenceIds: string[];
-  nextSceneId?: string;
-  dialogues: DialogueLine[];
-  choices?: Choice[];
+export interface RelationshipState {
+  trustLala: number;
+  trustAldi: number;
+  trustBintang: number;
+  trustCitra: number;
+  trustRendra: number;
+  trustPakArdi: number;
 }
 
-export interface DialogueLine {
-  speaker: string;
-  expression: string;
-  text: string;
+export interface GameProgress {
+  currentSceneId: string;
+  currentChapter: string;
+  collectedEvidenceIds: string[];
+  foundInsightIds: string[];
+  choices: string[];
+  confrontedNpcs: string[];
+  playerState: PlayerState;
+  relationships: RelationshipState;
 }
 
-export interface Choice {
-  id: string;
-  text: string;
-  effect: string;
-}
-
-export interface EvidenceRule {
-  id: string;
-  evidenceAId: string;
-  evidenceBId: string;
-  kind: RelationKind;
-  label: string;
-  explanation: string;
-  unlocksConfrontation: boolean;
-}
-
-export interface ClaimInspectionRule {
-  claimId: string;
+export interface BoardNode {
   evidenceId: string;
-  requiredInsightIds: string[];
-  verdict: "supports" | "contradicts" | "weak" | "needs_context";
-  feedback: string;
-  unlocksConfrontationId?: string;
+  position: { x: number; y: number };
 }
 
-export interface EditorialDecision {
+export interface BoardEdge {
   id: string;
-  label: string;
-  summary: string;
+  sourceNodeId: string;
+  targetNodeId: string;
+  ruleId?: string;
+  kind?: RelationKind;
 }
 
-export interface EditorialOutcome {
-  tier: "strong" | "partial" | "failure";
-  title: string;
-  narrative: string;
-  reputationDelta: number;
-  rumorSpreadDelta: number;
-  reflectionBullets: string[];
+export interface BoardState {
+  nodes: BoardNode[];
+  edges: BoardEdge[];
+}
+
+export interface SaveData {
+  version: string;
+  timestamp: number;
+  screen: Screen;
+  progress: GameProgress;
+  confrontations: string[];
+  boardState: BoardState;
 }
 
 export interface ChapterData {
@@ -91,9 +79,31 @@ export interface ChapterData {
   editorialDecisions: EditorialDecision[];
 }
 
-export interface GameProgress {
-  currentSceneId: string;
-  collectedEvidenceIds: string[];
-  foundInsightIds: string[];
-  choices: string[];
-}
+export const DEFAULT_PLAYER_STATE: PlayerState = {
+  curiosityScore: 50,
+  cautionScore: 50,
+  reputation: 50,
+  credibilityScore: 50,
+  rumorSpread: 50,
+  evidenceQuality: 0,
+};
+
+export const DEFAULT_RELATIONSHIPS: RelationshipState = {
+  trustLala: 60,
+  trustAldi: 50,
+  trustBintang: 50,
+  trustCitra: 50,
+  trustRendra: 50,
+  trustPakArdi: 50,
+};
+
+export const DEFAULT_PROGRESS: GameProgress = {
+  currentSceneId: 'CH1_S00',
+  currentChapter: 'CH1',
+  collectedEvidenceIds: [],
+  foundInsightIds: [],
+  choices: [],
+  confrontedNpcs: [],
+  playerState: { ...DEFAULT_PLAYER_STATE },
+  relationships: { ...DEFAULT_RELATIONSHIPS },
+};
