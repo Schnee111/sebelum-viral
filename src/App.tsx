@@ -238,7 +238,7 @@ function App() {
       <BoardScreen
         evidences={collectedEvidenceData}
         rules={chapter1.rules}
-        existingEdges={boardEdges}
+        existingEdges={boardEdges.filter((e) => e.kind !== 'unknown' && e.kind !== 'irrelevant')}
         foundInsightIds={progress.foundInsightIds}
         onConnect={handleConnect}
         onBack={() => setScreen('hub')}

@@ -226,7 +226,6 @@ export function BoardCanvas({
         setSelectedA(null);
       } else {
         const result = evaluateConnection(rules, selectedA, evidenceId);
-        const edge = createEdge(selectedA, evidenceId, result);
         setLastResult({
           kind: result.kind,
           label: result.label,
@@ -234,20 +233,27 @@ export function BoardCanvas({
           evidenceA: evidences.find((e) => e.id === selectedA)?.title ?? '',
           evidenceB: evidences.find((e) => e.id === evidenceId)?.title ?? '',
         });
-        setEdges((prev) => {
-          const isDup = prev.some(
-            (e) =>
-              (e.sourceNodeId === edge.sourceNodeId &&
-                e.targetNodeId === edge.targetNodeId) ||
-              (e.sourceNodeId === edge.targetNodeId &&
-                e.targetNodeId === edge.sourceNodeId),
-          );
-          if (!isDup) {
-            onConnect(edge, result.insightId);
-            return [...prev, edge];
-          }
-          return prev;
-        });
+
+        // Only draw lines for meaningful relations — skip irrelevant & unknown
+        const NO_LINE_KINDS: RelationKind[] = ['irrelevant', 'unknown'];
+        if (!NO_LINE_KINDS.includes(result.kind)) {
+          const edge = createEdge(selectedA, evidenceId, result);
+          setEdges((prev) => {
+            const isDup = prev.some(
+              (e) =>
+                (e.sourceNodeId === edge.sourceNodeId &&
+                  e.targetNodeId === edge.targetNodeId) ||
+                (e.sourceNodeId === edge.targetNodeId &&
+                  e.targetNodeId === edge.sourceNodeId),
+            );
+            if (!isDup) {
+              onConnect(edge, result.insightId);
+              return [...prev, edge];
+            }
+            return prev;
+          });
+        }
+
         setSelectedA(null);
       }
     },
