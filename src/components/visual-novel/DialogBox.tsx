@@ -2,7 +2,10 @@ import { useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { useTypewriter } from '../../hooks/useTypewriter';
+import { useSfx } from '../../hooks';
 import type { DialogueLine } from '../../types';
+import { Howl } from 'howler';
+import { useMemo, useEffect } from 'react';
 
 interface DialogBoxProps {
   line: DialogueLine;
@@ -11,14 +14,38 @@ interface DialogBoxProps {
 
 export function DialogBox({ line, onTap }: DialogBoxProps) {
   const { displayedText, isComplete, skip } = useTypewriter(line.text);
+  const { play: playSfx } = useSfx();
+
+  const blip = useMemo(() => {
+    let src = '/assets/audio/sfx/blip_mid.wav';
+    if (line.speaker === 'nala' || line.speaker === 'lala') src = '/assets/audio/sfx/blip_high.wav';
+    if (line.speaker === 'narrator' || line.speaker === 'system') src = '/assets/audio/sfx/blip_deep.wav';
+    
+    return new Howl({
+      src: [src],
+      volume: 0.15,
+    });
+  }, [line.speaker]);
+
+  // Play blip occasionally during typing
+  useEffect(() => {
+    if (!isComplete && displayedText.length > 0) {
+      const lastChar = displayedText[displayedText.length - 1];
+      if (lastChar.trim() && displayedText.length % 2 === 0) {
+        blip.play();
+      }
+    }
+  }, [displayedText, isComplete, blip]);
+
 
   const handleClick = useCallback(() => {
     if (!isComplete) {
       skip();
     } else {
+      playSfx('/assets/audio/sfx/sfx_click.wav');
       onTap();
     }
-  }, [isComplete, skip, onTap]);
+  }, [isComplete, skip, onTap, playSfx]);
 
   const isNarrator = line.speaker === 'narrator' || line.speaker === 'system';
   

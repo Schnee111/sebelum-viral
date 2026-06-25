@@ -49,3 +49,28 @@ export function useSfx() {
 
   return { play };
 }
+
+export function useVoice() {
+  const voiceRef = useRef<Howl | null>(null);
+  const sfxVolume = useSettingsStore((s) => s.sfxVolume); // voice tied to sfx volume or specific voice volume
+
+  const play = useCallback((src: string) => {
+    if (voiceRef.current) {
+      voiceRef.current.stop();
+    }
+    voiceRef.current = new Howl({
+      src: [src],
+      volume: sfxVolume,
+    });
+    voiceRef.current.play();
+  }, [sfxVolume]);
+
+  const stop = useCallback(() => {
+    if (voiceRef.current) {
+      voiceRef.current.stop();
+      voiceRef.current = null;
+    }
+  }, []);
+
+  return { play, stop };
+}
