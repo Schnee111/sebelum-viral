@@ -816,6 +816,7 @@ export const scenes: Scene[] = [
       { id: 'LMT_C1', text: 'Kembali', effect: '', tickerDelta: 0, nextSceneId: 'LOC_MADING' }
     ],
     unlockEvidenceIds: [],
+    unlockLocationIds: ['kantin', 'uks'],
     nextSceneId: 'LOC_MADING'
   },
   {

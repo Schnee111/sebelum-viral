@@ -108,7 +108,7 @@ export const DEFAULT_PROGRESS: GameProgress = {
   currentSceneId: 'CH1_S00',
   currentChapter: 'CH1',
   currentHoaxWave: 1,
-  unlockedLocations: ['kantin', 'uks', 'mading'],
+  unlockedLocations: ['mading'],
   ticker: 0,
   collectedEvidenceIds: [],
   foundInsightIds: [],

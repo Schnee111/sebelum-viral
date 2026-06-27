@@ -215,7 +215,7 @@ function App() {
         inventory={collectedEvidenceData}
         foundInsightIds={progress.foundInsightIds || []}
         currentHoaxWave={progress.currentHoaxWave || 1}
-        unlockedLocations={progress.unlockedLocations || ['kantin', 'uks', 'mading', 'lapangan']}
+        unlockedLocations={progress.unlockedLocations || ['mading']}
         onSelectLocation={(locationId) => {
           const ticker = progress.ticker || 0;
           const currentHoaxWave = progress.currentHoaxWave || 1;
@@ -353,9 +353,11 @@ function App() {
       />
     );
   } else if (screen === 'decision') {
-    const availableDecisions = chapter1.editorialDecisions.filter(
-      (d) => !d.requiredEvidenceIds || d.requiredEvidenceIds.every((id) => progress.collectedEvidenceIds.includes(id))
-    );
+    const availableDecisions = chapter1.editorialDecisions.filter((d) => {
+      const hasRequiredEvidence = !d.requiredEvidenceIds || d.requiredEvidenceIds.every((id) => progress.collectedEvidenceIds.includes(id));
+      const hasRequiredChoice = !d.requiredChoiceId || progress.choices.includes(d.requiredChoiceId);
+      return hasRequiredEvidence && hasRequiredChoice;
+    });
     activeScreenComponent = (
       <DecisionScreen
         decisions={availableDecisions}

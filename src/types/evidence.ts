@@ -61,6 +61,7 @@ export interface EditorialDecision {
   description: string;
   summary: string;
   requiredEvidenceIds?: string[];
+  requiredChoiceId?: string; // Links this decision to a specific confrontation choice
 }
 
 export interface EditorialOutcome {

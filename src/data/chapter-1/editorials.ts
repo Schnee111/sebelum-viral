@@ -17,20 +17,38 @@ export const editorialDecisions: EditorialDecision[] = [
   },
   {
     id: 'EDITORIAL_CLARIFY',
-    label: 'Rilis Liputan Investigasi Fakta',
+    label: 'Rilis Liputan Investigasi Fakta Keamanan Sistem',
     description:
-      'Terbitkan artikel berisi klarifikasi log sistem BK yang membuktikan chat tersebut adalah editan dari hasil retasan, mematahkan hoax utama.',
-    summary: 'Menerbitkan klarifikasi berbasis bukti kuat',
+      'Terbitkan artikel berisi pernyataan resmi BK dan bukti log sistem bahwa nilai rapor tidak pernah diubah, mematahkan hoax dari akar.',
+    summary: 'Menerbitkan klarifikasi sistemik',
     requiredEvidenceIds: ['EV_CH1_006'], // Requires Log Sistem
+    requiredChoiceId: 'CONF_C3', // Must confront Bu Salma to get her official statement
+  },
+  {
+    id: 'EDITORIAL_CLARIFY_ALDI',
+    label: 'Klarifikasi Konteks Candaan Internal',
+    description:
+      'Terbitkan pembelaan Aldi tentang konteks asli chatnya. Membersihkan namanya dari tuduhan suap, walau tidak mengungkap celah keamanan BK.',
+    summary: 'Membersihkan nama korban langsung',
+    requiredEvidenceIds: ['EV_CH1_005'], // Requires Alibi Aldi
+    requiredChoiceId: 'CONF_C1', // Must confront Aldi
   },
   {
     id: 'EDITORIAL_ANNOUNCEMENT',
-    label: 'Buat Imbauan Opini',
+    label: 'Buat Opini: Bahaya Kesenjangan & Doxxing',
     description:
-      'Terbitkan tulisan opini: "Bahaya Menyebar Data Pribadi (Doxxing) Tanpa Konteks". Tidak membela Aldi secara langsung, tapi meredam emosi massa.',
+      'Terbitkan tulisan opini tentang kesenjangan sosial yang memicu kecemburuan, meredam emosi massa tanpa membela Aldi secara spesifik.',
     summary: 'Menerbitkan opini untuk mendinginkan massa',
-    requiredEvidenceIds: ['EV_CH1_005'], // Requires Alibi Aldi
+    requiredChoiceId: 'CONF_C2', // Must confront Bintang
   },
+  {
+    id: 'EDITORIAL_GOSSIP_CULTURE',
+    label: 'Buat Opini: Toxicnya Budaya Gosip',
+    description:
+      'Terbitkan opini keras mengutuk budaya sebar screenshot tanpa izin dan bahaya anonimitas di sekolah.',
+    summary: 'Menerbitkan teguran keras soal etika gosip',
+    requiredChoiceId: 'CONF_C4', // Must confront Rendra
+  }
 ];
 
 export const editorialOutcomes: Record<string, EditorialOutcome> = {
@@ -60,26 +78,50 @@ export const editorialOutcomes: Record<string, EditorialOutcome> = {
   },
   'EDITORIAL_CLARIFY': {
     tier: 'strong',
-    title: 'Kebenaran Terungkap',
-    narrative: 'Artikel investigasimu membongkar bukti log sistem BK, menggeser fokus dari rumor suap menjadi masalah keamanan siber. Reputasi Aldi pulih, dan sekolah mulai menyelidiki pelaku sebenarnya.',
+    title: 'Kebenaran Sistemik Terungkap',
+    narrative: 'Dengan restu BK, artikel investigasimu membongkar bukti log sistem, menggeser fokus dari rumor suap menjadi masalah keamanan siber. Reputasi Aldi pulih total, dan sekolah sadar mereka harus berbenah.',
     reputationDelta: 30,
     rumorSpreadDelta: -40,
     reflectionBullets: [
-      'Klarifikasi berbasis bukti empiris (log sistem) mutlak mematahkan hoaks.',
-      'Mengungkap kelemahan sistem (komputer BK) melindungi korban salah tuduh.',
-      'Kamu telah menyelamatkan Aldi dan membuktikan integritas mading.'
+      'Konfrontasi dengan pihak otoritas (BK) memberikan validitas mutlak pada artikelmu.',
+      'Mengungkap kelemahan sistem (komputer BK) melindungi korban salah tuduh secara struktural.',
+      'Kamu telah menyelamatkan Aldi dan membuktikan integritas mading sebagai pilar literasi digital.'
+    ]
+  },
+  'EDITORIAL_CLARIFY_ALDI': {
+    tier: 'partial',
+    title: 'Nama Baik Terselamatkan',
+    narrative: 'Kamu berhasil meyakinkan Aldi untuk memberikan pernyataan terbuka soal konteks candaannya. Publik berhenti menyerang Aldi, namun rumor tentang "ada siswa lain yang menyuap Kepsek" masih beredar karena akar masalah (log sistem) tidak dipublikasikan.',
+    reputationDelta: 15,
+    rumorSpreadDelta: -20,
+    reflectionBullets: [
+      'Konfrontasi langsung dengan korban (Aldi) memberinya ruang membela diri.',
+      'Konteks adalah hal pertama yang hilang di dunia digital.',
+      'Meski nama Aldi bersih, gagal mengungkap celah sistem membiarkan rumor berevolusi.'
     ]
   },
   'EDITORIAL_ANNOUNCEMENT': {
     tier: 'partial',
-    title: 'Pereda Suasana',
-    narrative: 'Kamu menerbitkan opini tentang bahaya doxxing. Opini ini berhasil membuat siswa menahan diri untuk membully Aldi, namun rumor utamanya tidak terpecahkan karena log sistem tidak diungkap.',
+    title: 'Pereda Suasana (Opini Sosial)',
+    narrative: 'Setelah berdiskusi dengan Bintang, kamu menulis opini tajam tentang bagaimana kesenjangan sosial memicu perburuan penyihir (witch-hunt) di sekolah. Siswa merenung dan eskalasi menurun, tapi misteri siapa peretas BK tetap tak terpecahkan.',
     reputationDelta: 10,
     rumorSpreadDelta: -10,
     reflectionBullets: [
-      'Mengedukasi pembaca tentang etika digital cukup meredakan perburuan.',
-      'Namun tanpa bukti valid yang mematahkan rumor, keraguan publik tetap ada.',
-      'Dibutuhkan bukti absolut (log) untuk membersihkan nama korban sepenuhnya.'
+      'Diskusi dengan Bintang menyadarkanmu bahwa isu ini berakar pada ketidaksetaraan.',
+      'Opini publik bisa diarahkan untuk introspeksi massal.',
+      'Namun tanpa bukti absolut (log sistem BK), isu teknis peretasan tidak terselesaikan.'
+    ]
+  },
+  'EDITORIAL_GOSSIP_CULTURE': {
+    tier: 'failure',
+    title: 'Menyalahkan Tanpa Solusi',
+    narrative: 'Setelah memarahi Rendra, kamu merilis tulisan yang mengutuk budaya gosip sekolah. Sayangnya, artikelmu dianggap sok suci dan tidak relevan. Murid tetap menyebarkan rumor karena mereka merasa mading gagal menjawab inti tuduhan terhadap Aldi.',
+    reputationDelta: -10,
+    rumorSpreadDelta: 15,
+    reflectionBullets: [
+      'Menyerang penyebar pasif (Rendra) tidak menyentuh akar masalah.',
+      'Tulisan normatif (ceramah moral) di tengah krisis fakta sering kali diabaikan audiens.',
+      'Dibutuhkan jurnalisme data, bukan sekadar opini, untuk mematahkan hoaks spesifik.'
     ]
   }
 };
