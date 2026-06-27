@@ -349,9 +349,7 @@ export const scenes: Scene[] = [
       { id: 'LR_T2', speaker: 'nala', expression: 'neutral', text: 'Nggak sih, kebetulan lewat aja. Lo santai banget, padahal sekolah lagi heboh.' },
       { id: 'LR_T3', speaker: 'rendra', expression: 'neutral', text: 'Biasa aja kali, yang heboh kan Aldi. Makanya jangan kebanyakan tingkah.' }
     ],
-    choices: [
-      { id: 'LKT_C1', text: 'Kembali', effect: 'Selesai bicara', tickerDelta: 0, nextSceneId: 'LOC_KANTIN' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_KANTIN'
   },
@@ -370,9 +368,7 @@ export const scenes: Scene[] = [
       { id: 'LKI_2', speaker: 'nala', expression: 'curious', text: 'Mereka pada asyik main HP sambil ketawa-ketawa. Kayaknya mereka punya grup tongkrongan sendiri.' },
       { id: 'LKI_3', speaker: 'narrator', expression: 'neutral', text: 'Insight baru ditambahkan ke catatan Nala: "Grup Tongkrongan Rendra". Ini bisa jadi sumber awal mula tersebarnya foto.' }
     ],
-    choices: [
-      { id: 'LKPD_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_KANTIN' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_KANTIN'
   },
@@ -435,9 +431,7 @@ export const scenes: Scene[] = [
       { id: 'LKIS_2', speaker: 'rendra', expression: 'defensive', text: 'Gue dapet dari... aduh, gue lupa. Pokoknya dari orang lain.' },
       { id: 'LKIS_3', speaker: 'nala', expression: 'worried', text: '(Dia berbohong. Pendekatan halus tidak mempan untuk Rendra, dia butuh ditekan keras.)' }
     ],
-    choices: [
-      { id: 'LKIS_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_KANTIN' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_KANTIN'
   },
@@ -460,9 +454,7 @@ export const scenes: Scene[] = [
       { id: 'LKIH_5', speaker: 'nala', expression: 'curious', text: 'Akun fake? Ada petunjuk lain?' },
       { id: 'LKIH_6', speaker: 'rendra', expression: 'neutral', text: 'Nggak tahu. Tapi jujur aja, Bintang juga kemaren sempet nyindir Aldi soal nilai. Bintang bilang Aldi sering keluar masuk ruang BK seminggu terakhir ini.' }
     ],
-    choices: [
-      { id: 'LKIH_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_KANTIN' }
-    ],
+    choices: [],
     unlockEvidenceIds: ['EV_CH1_004'], // New evidence: Rendra's testimony about Bintang
     nextSceneId: 'LOC_KANTIN'
   },
@@ -511,9 +503,7 @@ export const scenes: Scene[] = [
       { id: 'LU_02', speaker: 'nala', expression: 'worried', text: 'Tenang aja Al, aku lagi usut. Kamu istirahat aja dulu di sini.' },
       { id: 'LU_03', speaker: 'aldi', expression: 'defensive', text: 'Gue bingung, sumpah. Gue ngerasa dijebak.' }
     ],
-    choices: [
-      { id: 'LUPD_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_UKS' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_UKS'
   },
@@ -531,9 +521,7 @@ export const scenes: Scene[] = [
       { id: 'LUI_1', speaker: 'narrator', expression: 'neutral', text: 'Nala melihat ke sekeliling UKS. Tidak ada yang aneh, hanya botol-botol obat dan ranjang.' },
       { id: 'LUI_2', speaker: 'nala', expression: 'neutral', text: 'Kayaknya nggak ada petunjuk apa-apa di sini. Fokusku harusnya nanya ke Aldi.' }
     ],
-    choices: [
-      { id: 'LUI_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_UKS' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_UKS'
   },
@@ -596,9 +584,7 @@ export const scenes: Scene[] = [
       { id: 'LUIS_2', speaker: 'aldi', expression: 'defensive', text: 'Gue ngurus berkas beasiswa. Udah, itu aja.' },
       { id: 'LUIS_3', speaker: 'nala', expression: 'worried', text: '(Sepertinya ada yang dia sembunyikan atau ragu untuk diceritakan. Aku harus menekan lebih keras.)' }
     ],
-    choices: [
-      { id: 'LUIS_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_UKS' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_UKS'
   },
@@ -623,9 +609,7 @@ export const scenes: Scene[] = [
       { id: 'LUIH_7', speaker: 'aldi', expression: 'shocked', text: 'Dan komputer Bu Salma waktu itu nyala! Nggak dikunci! Gue liat sekilas ada aplikasi database sekolah yang kebuka.' },
       { id: 'LUIH_8', speaker: 'nala', expression: 'shocked', text: 'Artinya... siapa pun bisa aja masuk dan mengubah nilai kalau kondisinya begitu!' }
     ],
-    choices: [
-      { id: 'LUIH_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_UKS' }
-    ],
+    choices: [],
     unlockEvidenceIds: ['EV_CH1_005'], // New evidence: Aldi's Alibi
     unlockLocationIds: ['bk'],
     nextSceneId: 'LOC_UKS'
@@ -694,9 +678,7 @@ export const scenes: Scene[] = [
       { id: 'LBI_1', speaker: 'narrator', expression: 'neutral', text: 'Nala melirik layar komputer Bu Salma. Layarnya menonjolkan aplikasi penginputan nilai yang terbuka penuh.' },
       { id: 'LBI_2', speaker: 'nala', expression: 'curious', text: '(Komputer ini menyimpan semua data rahasia siswa. Pasti ada password-nya kan?)' }
     ],
-    choices: [
-      { id: 'LBPD_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_BK' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_BK'
   },
@@ -781,9 +763,7 @@ export const scenes: Scene[] = [
       { id: 'LBIH_5', speaker: 'busalma', expression: 'shocked', text: 'Astaga... Ada login aktif selama jam rapat kemarin. Seseorang meretas masuk atau... menggunakan komputer ini.' },
       { id: 'LBIH_6', speaker: 'nala', expression: 'shocked', text: 'Siapa pun orang itu, dialah yang mengubah nilai Aldi.' }
     ],
-    choices: [
-      { id: 'LBIH_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_BK' }
-    ],
+    choices: [],
     unlockEvidenceIds: ['EV_CH1_006'], // New evidence: Login Aktif Jam Rapat
     unlockLocationIds: ['lapangan'],
     nextSceneId: 'LOC_BK'
@@ -824,9 +804,7 @@ export const scenes: Scene[] = [
       { id: 'LMT_2', speaker: 'nala', expression: 'determined', text: 'Iya Kak. Aku butuh arahan, sebaiknya mulai dari mana?' },
       { id: 'LMT_3', speaker: 'lala', expression: 'neutral', text: 'Coba ke Kantin buat cek Rendra, dia yang pertama kali ngeretweet. Atau ke UKS buat nanya langsung ke Aldi keadaannya.' }
     ],
-    choices: [
-      { id: 'LMT_C1', text: 'Kembali', effect: '', tickerDelta: 0, nextSceneId: 'LOC_MADING' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     unlockLocationIds: ['kantin', 'uks'],
     nextSceneId: 'LOC_MADING'
@@ -846,9 +824,7 @@ export const scenes: Scene[] = [
       { id: 'LMI_2', speaker: 'nala', expression: 'neutral', text: 'Ada foto Bintang dan Aldi berdampingan sebagai peraih nilai tertinggi try out bulan lalu.' },
       { id: 'LMI_3', speaker: 'nala', expression: 'curious', text: '(Mereka memang saingan ketat. Pasti tekanan untuk selalu jadi nomor satu itu besar.)' }
     ],
-    choices: [
-      { id: 'LMI_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_MADING' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_MADING'
   },
@@ -955,9 +931,7 @@ export const scenes: Scene[] = [
       { id: 'LLT_2', speaker: 'nala', expression: 'neutral', text: 'Iya. Kok kamu kelihatan santai banget soal isu itu?' },
       { id: 'LLT_3', speaker: 'bintang', expression: 'neutral', text: 'Buat apa heboh? Kebenaran selalu nemuin jalannya. Kalau dia curang, biar sistem yang hukum.' }
     ],
-    choices: [
-      { id: 'LLT_C1', text: 'Kembali', effect: '', tickerDelta: 0, nextSceneId: 'LOC_LAPANGAN' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_LAPANGAN'
   },
@@ -976,9 +950,7 @@ export const scenes: Scene[] = [
       { id: 'LLI_2', speaker: 'nala', expression: 'curious', text: '(Dia selalu update dengan data akademik. Bintang terkenal sering membantu guru rekap nilai karena dia jago IT.)' },
       { id: 'LLI_3', speaker: 'nala', expression: 'determined', text: '(Dia punya akses. Dia punya skill. Dan dia punya motif.)' }
     ],
-    choices: [
-      { id: 'LLI_C1', text: 'Kembali', effect: '', tickerDelta: 1, nextSceneId: 'LOC_LAPANGAN' }
-    ],
+    choices: [],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_LAPANGAN'
   },
