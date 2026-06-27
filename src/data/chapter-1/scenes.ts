@@ -27,7 +27,7 @@ export const scenes: Scene[] = [
       { id: 'CH1_S00_D007', speaker: 'narrator', expression: 'neutral', text: 'Nala tahu itu gaya bercandaan Aldi yang sarkas. Tapi bagi ribuan orang di internet, itu adalah pengakuan dosa.' },
       { id: 'CH1_S00_D008', speaker: 'nala', expression: 'worried', text: 'Gawat, aku harus cari Aldi sekarang sebelum situasi makin parah!' },
     ],
-    unlockEvidenceIds: ['EV_CH1_001'], // Screenshot Chat Aldi
+    unlockEvidenceIds: ['EV_CH1_001', 'EV_CH1_002', 'EV_CH1_003'], // Brief + Postingan GarudaMenfess + Screenshot Chat Guru
     nextSceneId: 'CH1_S01',
   },
 
