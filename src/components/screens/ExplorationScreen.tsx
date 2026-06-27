@@ -66,7 +66,7 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="grid grid-cols-2 md:grid-cols-4 gap-4"
+                className="grid grid-cols-1 md:grid-cols-3 gap-4"
               >
                 <ActionButton
                   icon={<MessageSquare size={20} />}
@@ -74,14 +74,6 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
                   desc="Obrolan santai"
                   onClick={() => onAction(exp.talkSceneId)}
                   color="#34D399"
-                />
-                <ActionButton
-                  icon={<AlertCircle size={20} />}
-                  label="Interogasi"
-                  desc={!visitedSceneIds.includes(exp.talkSceneId) ? 'Terkunci (Ngobrol dulu)' : 'Beri tekanan'}
-                  onClick={() => setActiveMenu('interrogate')}
-                  color="#F59E0B"
-                  disabled={!exp.interrogationScenes || !visitedSceneIds.includes(exp.talkSceneId)}
                 />
                 <ActionButton
                   icon={<Search size={20} />}
@@ -93,8 +85,8 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
                 />
                 <ActionButton
                   icon={<Zap size={20} />}
-                  label="Konfrontasi"
-                  desc={!visitedSceneIds.includes(exp.talkSceneId) ? 'Terkunci (Ngobrol dulu)' : 'Sodorkan bukti'}
+                  label="Sodorkan Bukti"
+                  desc={!visitedSceneIds.includes(exp.talkSceneId) ? 'Terkunci (Ngobrol dulu)' : 'Tekan dengan bukti'}
                   onClick={() => setActiveMenu('present')}
                   color="#E11D48"
                   disabled={!visitedSceneIds.includes(exp.talkSceneId)}
@@ -102,43 +94,7 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
               </motion.div>
             )}
 
-            {/* INTERROGATE MENU */}
-            {activeMenu === 'interrogate' && (
-              <motion.div
-                key="interrogate"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                className="flex flex-col gap-4"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-sm font-bold text-[#F59E0B] tracking-widest uppercase">Pilih Pendekatan</div>
-                  <button onClick={() => setActiveMenu('main')} className="p-2 text-zinc-400 hover:text-white"><X size={20}/></button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <ActionButton
-                    icon={null}
-                    label="Lembut"
-                    desc="Pendekatan santai"
-                    onClick={() => exp.interrogationScenes?.soft && onAction(exp.interrogationScenes.soft)}
-                  />
-                  <ActionButton
-                    icon={null}
-                    label="Keras"
-                    desc={!visitedSceneIds.includes(exp.interrogationScenes?.soft || '') ? 'Terkunci (Coba halus dulu)' : 'Tekanan tinggi'}
-                    onClick={() => exp.interrogationScenes?.hard && onAction(exp.interrogationScenes.hard)}
-                    disabled={!exp.interrogationScenes?.hard || !visitedSceneIds.includes(exp.interrogationScenes?.soft || '')}
-                  />
-                  <ActionButton
-                    icon={null}
-                    label="Psikologis"
-                    desc={!visitedSceneIds.includes(exp.interrogationScenes?.hard || '') ? 'Terkunci (Coba keras dulu)' : 'Bongkar motif'}
-                    onClick={() => exp.interrogationScenes?.psychological && onAction(exp.interrogationScenes.psychological)}
-                    disabled={!exp.interrogationScenes?.psychological || !visitedSceneIds.includes(exp.interrogationScenes?.hard || '')}
-                  />
-                </div>
-              </motion.div>
-            )}
+
 
             {/* PRESENT EVIDENCE MENU */}
             {activeMenu === 'present' && (

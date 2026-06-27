@@ -410,7 +410,11 @@ export const scenes: Scene[] = [
       { id: 'LKPC_1', speaker: 'nala', expression: 'determined', text: 'Lo tau kan sama screenshot chat ini? Akun lo yang pertama kali nge-retweet postingan GarudaMenfess.' },
       { id: 'LKPC_2', speaker: 'rendra', expression: 'shocked', text: 'L-lah? Kok nuduh gue? Gue cuma bantu nge-share biar orang-orang pada melek!' },
       { id: 'LKPC_3', speaker: 'nala', expression: 'determined', text: 'Berarti lo emang udah nyimpen screenshot ini sebelum viral. Jujur aja, lo dapet dari mana?!' },
-      { id: 'LKPC_4', speaker: 'narrator', expression: 'neutral', text: '(Pertahanan Rendra goyah. Mode INTEROGASI sekarang bisa digunakan untuk menekan Rendra.)' }
+      { id: 'LKPC_4', speaker: 'narrator', expression: 'neutral', text: '(Pertahanan Rendra goyah. Bagaimana caramu mendesaknya?)' }
+    ],
+    choices: [
+      { id: 'LKPC_C1', text: 'Pendekatan Halus: Bujuk agar jujur', effect: 'Rendra mungkin menghindar', tickerDelta: 1, nextSceneId: 'LOC_KANTIN_INTEROGASI_SOFT' },
+      { id: 'LKPC_C2', text: 'Pendekatan Keras: Ancam lapor sekolah', effect: 'Rendra akan tertekan', tickerDelta: 1, nextSceneId: 'LOC_KANTIN_INTEROGASI_HARD' }
     ],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_KANTIN'
@@ -567,7 +571,11 @@ export const scenes: Scene[] = [
       { id: 'LUPT_1', speaker: 'nala', expression: 'determined', text: 'Al, aku butuh kejujuranmu. Rendra dan Bintang bilang kamu sering keluar masuk ruang BK seminggu ini.' },
       { id: 'LUPT_2', speaker: 'aldi', expression: 'shocked', text: 'Hah?! Mereka nuduh gue nyogok guru karena itu?!' },
       { id: 'LUPT_3', speaker: 'nala', expression: 'determined', text: 'Jadi bener kamu sering ke sana? Ngapain?' },
-      { id: 'LUPT_4', speaker: 'narrator', expression: 'neutral', text: '(Gunakan mode INTEROGASI untuk menekan Aldi soal alibinya.)' }
+      { id: 'LUPT_4', speaker: 'narrator', expression: 'neutral', text: '(Aldi tampak ragu. Bagaimana caramu mendesaknya?)' }
+    ],
+    choices: [
+      { id: 'LUPT_C1', text: 'Pendekatan Halus: Bujuk perlahan', effect: 'Aldi masih menutupi sesuatu', tickerDelta: 1, nextSceneId: 'LOC_UKS_INTEROGASI_SOFT' },
+      { id: 'LUPT_C2', text: 'Pendekatan Keras: Desak kebenarannya', effect: 'Aldi akan buka suara', tickerDelta: 1, nextSceneId: 'LOC_UKS_INTEROGASI_HARD' }
     ],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_UKS'
@@ -726,7 +734,11 @@ export const scenes: Scene[] = [
       { id: 'LBPA_1', speaker: 'nala', expression: 'determined', text: 'Bu, saya mendapat kesaksian bahwa saat rapat guru kemarin, komputer Ibu dibiarkan menyala tanpa dikunci.' },
       { id: 'LBPA_2', speaker: 'busalma', expression: 'shocked', text: 'Apa maksudmu?!' },
       { id: 'LBPA_3', speaker: 'nala', expression: 'determined', text: 'Aplikasi database sekolah Ibu terbuka dan bisa diakses siapa saja yang masuk ke ruangan ini.' },
-      { id: 'LBPA_4', speaker: 'narrator', expression: 'neutral', text: '(Bu Salma terlihat panik. Mode INTEROGASI sekarang terbuka!)' }
+      { id: 'LBPA_4', speaker: 'narrator', expression: 'neutral', text: '(Bu Salma terlihat panik. Bagaimana caramu mendesaknya?)' }
+    ],
+    choices: [
+      { id: 'LBPA_C1', text: 'Pendekatan Halus: Konfirmasi kepergiannya', effect: 'Bu Salma akan berkelit', tickerDelta: 1, nextSceneId: 'LOC_BK_INTEROGASI_SOFT' },
+      { id: 'LBPA_C2', text: 'Pendekatan Keras: Tuntut cek log sistem', effect: 'Bu Salma terpaksa mengecek', tickerDelta: 1, nextSceneId: 'LOC_BK_INTEROGASI_HARD' }
     ],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_BK'
@@ -1005,7 +1017,11 @@ export const scenes: Scene[] = [
       { id: 'LLPL_2', speaker: 'bintang', expression: 'neutral', text: 'Lalu? Bisa saja Aldi sendiri yang mengubahnya.' },
       { id: 'LLPL_3', speaker: 'nala', expression: 'determined', text: 'Waktu rapat guru, Aldi ada di depan kelasku, kami ada ekskul. Sementara kamu... permisi ke UKS, kan? Yang searah dengan ruang BK.' },
       { id: 'LLPL_4', speaker: 'bintang', expression: 'neutral', text: 'Lo nggak punya bukti nyata gue pelakunya. Itu asumsi murahan, Nala.' },
-      { id: 'LLPL_5', speaker: 'narrator', expression: 'neutral', text: '(Gunakan mode INTEROGASI keras untuk mematahkan kebohongan terakhirnya!)' }
+      { id: 'LLPL_5', speaker: 'narrator', expression: 'neutral', text: '(Bintang masih mencoba berkelit. Bagaimana caramu mendesaknya?)' }
+    ],
+    choices: [
+      { id: 'LLPL_C1', text: 'Pendekatan Halus: Bicara dari hati ke hati', effect: 'Bintang akan defensif', tickerDelta: 1, nextSceneId: 'LOC_LAPANGAN_INTEROGASI_SOFT' },
+      { id: 'LLPL_C2', text: 'Pendekatan Keras: Patahkan logikanya', effect: 'Bintang kehabisan alasan', tickerDelta: 1, nextSceneId: 'LOC_LAPANGAN_INTEROGASI_HARD' }
     ],
     unlockEvidenceIds: [],
     nextSceneId: 'LOC_LAPANGAN'
