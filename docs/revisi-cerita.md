@@ -217,16 +217,7 @@ GELOMBANG HOAX 3 muncul (S05)
 
 **Penting:** Hoax Gelombang 2-5 bukan dibuat oleh orang yang sama. Masing-masing punya sumber dan motif berbeda. Ini yang membuat situasi tidak terkendali — Nala tidak bisa "memutus rantai" karena rantainya bercabang ke mana-mana.
 
-### Pilihan Nala: Prioritas Verifikasi
-
-Nala tidak bisa menghentikan hoax baru. Tapi dia bisa memilih **hoax mana yang mau diverifikasi duluan** — karena sumber daya terbatas, dan semakin lama dia diam, semakin dipercaya hoax tersebut.
-
-| Pilihan Verifikasi | Efek | Risiko |
-|--------------------|------|--------|
-| **Verifikasi Gelombang 2** (nilai) | Buktikan inflasi nilai sistemik — Aldi bukan outlier | Hoax 3-5 terus berkembang tanpa klarifikasi |
-| **Verifikasi Gelombang 3** (lomba) | Buktikan seleksi lomba tidak transparan — tapi bukan kesalahan Aldi | Hoax 4-5 makin liar |
-| **Verifikasi Gelombang 4** (doxxing) | Bela Aldi secara personal — laporkan penyebar data | Hoax 5 semakin dipercaya |
-| **Verifikasi Gelombang 5** (Kepsek) | Cegah krisis sekolah — tapi butuh data BK yang dilindungi | Hoax 2-4 tidak terkounter |
+> **Catatan mekanik:** 5 gelombang ini adalah **konten cerita** — bukan fitur game. Cara mainnya tetap 4 aksi + present evidence. Pemain confront karakter dengan bukti untuk verifikasi on-the-fly, tanpa sistem prioritas terpisah.
 
 ### Act 3: Final Confrontation & Editorial (S08-S10)
 
@@ -249,10 +240,10 @@ Yang membedakan:
 
 | Ending | Judul | Isi | Kondisi |
 |--------|-------|-----|---------|
-| **A** | "Mengungkap Otak di Balik Fitnah" | Cari kambing hitam | Tidak berhasil verifikasi hoax |
-| **B** | "Akun Anonim Harus Ditutup" | Serang platform | Hanya berhasil verifikasi Gelombang 1 |
-| **C** | "Konteks yang Hilang" | Fakta diungkap tanpa kambing hitam | Berhasil verifikasi 3+ gelombang |
-| **D ★** | "Besok Lebih Baik" | Reformasi + pengakuan semua pihak | Semua gelombang terverifikasi + confront berhasil + Kepsek kooperatif |
+|| **A** | "Mengungkap Otak di Balik Fitnah" | Cari kambing hitam | Tidak ada bukti kuat, publikasi asal |
+|| **B** | "Akun Anonim Harus Ditutup" | Serang platform | Hanya confront Rendra berhasil |
+|| **C** | "Konteks yang Hilang" | Fakta diungkap tanpa kambing hitam | Berhasil confront 3+ karakter + bukti cukup |
+|| **D ★** | "Besok Lebih Baik" | Reformasi + pengakuan semua pihak | Semua confront berhasil + data lengkap + Kepsek kooperatif |
 
 ---
 
@@ -345,8 +336,7 @@ Pemain bisa **kapan aja buka Case File** — review bukti, baca catatan, putuska
 ```
 
 - **Tidak ada batasan jumlah aksi** per siklus — pemain bisa melakukan sebanyak mungkin.
-- Tapi setiap aksi menghabiskan waktu (ticker naik). Puzzle verifikasi menghabiskan paling banyak waktu.
-- **Jika ticker terlalu tinggi** → beberapa opsi confrontation final terkunci.
+- Satu-satunya batasan: pemain bisa lanjut ke gelombang berikutnya KAPAN AJA dengan memilih "Lanjut" — tapi kalau lanjut tanpa confront cukup, hoax baru menyulitkan.
 
 ### Analogi yang Dipegang
 
@@ -391,8 +381,8 @@ Hoax 5 (Kepsek terlibat) → api mencapai langit-langit
 | Aspek | Sebelum | Sesudah |
 |-------|---------|---------|
 | **Struktur misteri** | 4 thread paralel — pemain pilih | **Eskalasi natural** — hoax muncul bertahap, Nala merespon |
-| **Pilihan pemain** | Pilih thread mana yang diinvestigasi | **Pilih prioritas verifikasi** — hoax mana yang harus diverifikasi duluan |
-| **Sumber hoax** | Satu rantai (Rendra→Citra→Dewa→Admin) | **Banyak sumber independen** — tiap gelombang punya sumber beda |
-| **Korban** | Aldi difitnah satu tuduhan | **Samsak sosial** — semua aspek hidupnya dikuliti habis |
-| **Mekanik utama** | Branching investigation | **Crisis management** — Nala kewalahan, harus prioritaskan |
-| **Pembelajaran** | Lacak rantai penyebaran | Hoax cascade + verifikasi di tengah tekanan |
+|| **Pilihan pemain** | Pilih thread mana yang diinvestigasi | **4 aksi + present evidence** — confront karakter dengan bukti untuk verifikasi |
+|| **Sumber hoax** | Satu rantai (Rendra→Citra→Dewa→Admin) | **Banyak sumber independen** — tiap gelombang punya sumber beda |
+|| **Korban** | Aldi difitnah satu tuduhan | **Samsak sosial** — semua aspek hidupnya dikuliti habis |
+|| **Mekanik utama** | Branching investigation | **4 aksi + 3 pendekatan interogasi + present evidence** |
+|| **Pembelajaran** | Lacak rantai penyebaran | Hoax cascade + verifikasi via confront karakter |
