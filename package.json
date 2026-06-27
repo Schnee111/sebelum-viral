@@ -13,7 +13,6 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.62.0",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.0",
     "howler": "^2.2.4",
