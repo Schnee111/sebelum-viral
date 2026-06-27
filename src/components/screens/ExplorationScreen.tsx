@@ -86,10 +86,10 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
                 <ActionButton
                   icon={<Zap size={20} />}
                   label="Sodorkan Bukti"
-                  desc={!visitedSceneIds.includes(exp.talkSceneId) ? 'Terkunci (Ngobrol dulu)' : 'Tekan dengan bukti'}
+                  desc={!exp.defaultPresentSceneId && !exp.presentEvidenceRoutes ? 'Tidak tersedia di sini' : !visitedSceneIds.includes(exp.talkSceneId) ? 'Terkunci (Ngobrol dulu)' : 'Tekan dengan bukti'}
                   onClick={() => setActiveMenu('present')}
                   color="#E11D48"
-                  disabled={!visitedSceneIds.includes(exp.talkSceneId)}
+                  disabled={!visitedSceneIds.includes(exp.talkSceneId) || (!exp.defaultPresentSceneId && !exp.presentEvidenceRoutes)}
                 />
               </motion.div>
             )}

@@ -820,9 +820,9 @@ export const scenes: Scene[] = [
       { characterId: 'lala', position: 'right', initialExpression: 'neutral' }
     ],
     dialogues: [
-      { id: 'LMT_1', speaker: 'lala', expression: 'neutral', text: 'Gimana Na investigasinya? Ada progres?' },
-      { id: 'LMT_2', speaker: 'nala', expression: 'determined', text: 'Lumayan La, aku udah dapet beberapa petunjuk penting dari anak-anak.' },
-      { id: 'LMT_3', speaker: 'lala', expression: 'neutral', text: 'Semangat! Kalau butuh aku cek silang data atau nge-stalk medsos orang, bilang aja.' }
+      { id: 'LMT_1', speaker: 'lala', expression: 'neutral', text: 'Gimana Na investigasinya? Kamu baru mulai, kan?' },
+      { id: 'LMT_2', speaker: 'nala', expression: 'determined', text: 'Iya Kak. Aku butuh arahan, sebaiknya mulai dari mana?' },
+      { id: 'LMT_3', speaker: 'lala', expression: 'neutral', text: 'Coba ke Kantin buat cek Rendra, dia yang pertama kali ngeretweet. Atau ke UKS buat nanya langsung ke Aldi keadaannya.' }
     ],
     choices: [
       { id: 'LMT_C1', text: 'Kembali', effect: '', tickerDelta: 0, nextSceneId: 'LOC_MADING' }
