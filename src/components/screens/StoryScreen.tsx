@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Background } from '../visual-novel/Background';
 import { CharacterSprite } from '../visual-novel/CharacterSprite';
 import { DialogBox } from '../visual-novel/DialogBox';
@@ -17,7 +16,6 @@ interface StoryScreenProps {
 export function StoryScreen({
   scene,
   currentLine,
-  inventory,
   onChoose,
   onTapDialog,
   isDialogComplete,

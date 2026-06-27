@@ -25,7 +25,7 @@ export function EvidenceNode({ evidence, isSelected, isOnBoard, onClick }: Evide
           {evidence.title}
         </div>
         <div className="text-[10px] text-game-accent uppercase tracking-wider font-bold">
-          {evidence.type}
+          {evidence.kind}
         </div>
       </div>
     </motion.div>

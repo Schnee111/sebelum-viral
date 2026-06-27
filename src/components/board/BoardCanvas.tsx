@@ -407,8 +407,6 @@ export function BoardCanvas({
               const y1 = s.y;
               const x2 = t.x;
               const y2 = t.y;
-              const mx = (x1 + x2) / 2;
-              const my = (y1 + y2) / 2;
 
               // Straight, tight string for realistic detective board
               const d = `M${x1},${y1} L${x2},${y2}`;
@@ -576,7 +574,7 @@ export function BoardCanvas({
                 onPointerDown={(e) => handlePointerDown(e, evidence.id)}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
-                onClick={(e) => {
+                onClick={() => {
                   if (!isDragging.current) {
                     handleCardClick(evidence.id);
                   }

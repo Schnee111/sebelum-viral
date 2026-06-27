@@ -31,7 +31,7 @@ export function DialogBox({ line, onTap }: DialogBoxProps) {
   useEffect(() => {
     if (!isComplete && displayedText.length > 0) {
       const lastChar = displayedText[displayedText.length - 1];
-      if (lastChar.trim() && displayedText.length % 2 === 0) {
+      if ((lastChar ?? '').trim() && displayedText.length % 2 === 0) {
         blip.play();
       }
     }
