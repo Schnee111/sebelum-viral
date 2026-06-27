@@ -2,7 +2,10 @@ import glob
 from PIL import Image
 
 def tight_crop_horizontal_and_zoom():
-    png_files = glob.glob("public/assets/characters/**/*.png", recursive=True)
+    png_files = [
+        "public/assets/characters/bintang/bintang_neutral.png",
+        "public/assets/characters/busalma/busalma_neutral.png"
+    ]
     for path in png_files:
         try:
             img = Image.open(path)

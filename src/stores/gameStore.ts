@@ -15,6 +15,9 @@ interface GameState {
   addInsight: (insightId: string) => void;
   addChoice: (choiceId: string) => void;
   addConfrontation: (confrontationId: string) => void;
+  advanceHoaxWave: () => void;
+  addTicker: (amount: number) => void;
+  unlockLocation: (locationId: string) => void;
   startGame: () => void;
   resetGame: () => void;
 }
@@ -73,9 +76,45 @@ export const useGameStore = create<GameState>((set) => ({
       return { confrontations: [...state.confrontations, confrontationId] };
     }),
 
+  advanceHoaxWave: () =>
+    set((state) => ({
+      progress: {
+        ...state.progress,
+        currentHoaxWave: Math.min(state.progress.currentHoaxWave + 1, 5),
+      },
+    })),
+
+  addTicker: (amount) =>
+    set((state) => {
+      const newTicker = state.progress.ticker + amount;
+      // Example logic: advance wave every 3 ticker points. This can be refined later.
+      const shouldAdvanceWave = Math.floor(newTicker / 3) > Math.floor(state.progress.ticker / 3);
+      
+      return {
+        progress: {
+          ...state.progress,
+          ticker: newTicker,
+          currentHoaxWave: shouldAdvanceWave 
+            ? Math.min(state.progress.currentHoaxWave + 1, 5) 
+            : state.progress.currentHoaxWave
+        }
+      };
+    }),
+
+  unlockLocation: (locationId) =>
+    set((state) => {
+      if (state.progress.unlockedLocations.includes(locationId)) return state;
+      return {
+        progress: {
+          ...state.progress,
+          unlockedLocations: [...state.progress.unlockedLocations, locationId]
+        }
+      };
+    }),
+
   startGame: () =>
     set({
-      screen: 'story',
+      screen: 'phone', // CH1_S00 is mode: 'phone'
       progress: { ...DEFAULT_PROGRESS },
       confrontations: [],
       isPlaying: true,

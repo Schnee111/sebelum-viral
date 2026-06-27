@@ -10,6 +10,7 @@ import {
   ConfrontationScreen,
   DecisionScreen,
   ReflectionScreen,
+  ExplorationScreen,
   SettingsModal,
 } from './components/screens';
 import { SmartphoneOverlay } from './components/smartphone';
@@ -26,7 +27,11 @@ import type { Screen, BoardEdge, Scene, EditorialOutcome, Evidence } from './typ
 
 const MODE_TO_SCREEN: Record<string, Screen> = {
   phone: 'phone',
-  board: 'hub',
+  story: 'story',
+  hub: 'hub',
+  visual_novel: 'visual_novel',
+  exploration: 'exploration',
+  board: 'board',
   inspection: 'inspection',
   confrontation: 'confrontation',
   decision: 'decision',
@@ -48,6 +53,7 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [showEvidence, setShowEvidence] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [interruptedTarget, setInterruptedTarget] = useState<string | null>(null);
   
   // State for new evidence toast
   const [toastEvidence, setToastEvidence] = useState<Evidence | null>(null);
@@ -72,10 +78,11 @@ function App() {
 
   // Memoize dialogues to prevent infinite loop
   const dialogues = useMemo(
-    () => ((screen === 'story' || screen === 'phone') ? currentScene?.dialogues ?? [] : []),
-    [screen, currentScene?.id]
+    () => ((screen === 'story' || screen === 'visual_novel' || screen === 'phone') ? currentScene?.dialogues ?? [] : []),
+    [screen, currentScene]
   );
   const { currentLine, isComplete, handleTap, reset: resetDialog } = useDialog(dialogues);
+  const dialogIdx = useDialogStore((state) => state.currentIndex);
 
   // Scene mode navigation helper
   const navigateFromScene = useCallback(
@@ -91,7 +98,7 @@ function App() {
 
   // Auto-advance when all dialog lines are done (no choices)
   useEffect(() => {
-    if (!isComplete || screen !== 'story' || !currentScene) return;
+    if (!isComplete || (screen !== 'story' && screen !== 'visual_novel') || !currentScene) return;
     if (currentScene.choices && currentScene.choices.length > 0) return;
 
     const timer = setTimeout(() => {
@@ -102,10 +109,10 @@ function App() {
         (s) => s.id === newProgress.currentSceneId,
       );
       navigateFromScene(nextScene);
-    }, 150);
+    }, 0);
 
     return () => clearTimeout(timer);
-  }, [isComplete, screen, currentScene, setProgress, navigateFromScene]);
+  }, [isComplete, screen, currentScene, setProgress, navigateFromScene, interruptedTarget]);
 
   // Immediately continue after selecting a choice
   const handleChoiceSelect = useCallback((choiceId: string) => {
@@ -146,7 +153,14 @@ function App() {
   useEffect(() => {
     void loadGame().then((data) => {
       if (data) {
-        setScreen(data.screen);
+        // Self-healing for corrupted saves from previous bug
+        const loadedScene = chapter1.scenes.find(s => s.id === data.progress.currentSceneId);
+        if (data.screen === 'story' && loadedScene?.mode === 'hub') {
+          setScreen('hub');
+        } else {
+          setScreen(data.screen);
+        }
+        
         setProgress(data.progress);
         useGameStore.setState({ confrontations: data.confrontations });
         useEvidenceStore.setState({
@@ -166,19 +180,22 @@ function App() {
 
   // ---- Render based on screen ----
 
+  let activeScreenComponent = null;
+
   if (isInitializing) {
-    return (
+    activeScreenComponent = (
       <div className="absolute inset-0 bg-navy-900 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-game-accent border-t-transparent rounded-full animate-spin" />
       </div>
     );
-  }
-
-  if (screen === 'landing') {
+  } else if (screen === 'landing') {
     return (
       <LandingScreen
         hasSave={progress.currentSceneId !== 'scene-1' || progress.collectedEvidenceIds.length > 0} 
-        onStart={startGame}
+        onStart={() => {
+          useEvidenceStore.getState().resetAll();
+          startGame();
+        }}
         onContinue={() => {
           void loadGame().then((data) => {
             if (data && data.screen !== 'landing') {
@@ -190,26 +207,70 @@ function App() {
         }}
       />
     );
-  }
-
-  if (screen === 'hub') {
+  } else if (screen === 'hub') {
     const canInspect =
       chapter1.claimRules.length > 0 && progress.collectedEvidenceIds.length > 0;
-    return (
+    activeScreenComponent = (
       <HubScreen
         inventory={collectedEvidenceData}
-        foundInsightIds={progress.foundInsightIds}
+        foundInsightIds={progress.foundInsightIds || []}
+        currentHoaxWave={progress.currentHoaxWave || 1}
+        unlockedLocations={progress.unlockedLocations || ['kantin', 'uks', 'mading', 'lapangan']}
+        onSelectLocation={(locationId) => {
+          const ticker = progress.ticker || 0;
+          const currentHoaxWave = progress.currentHoaxWave || 1;
+          
+          const targetSceneId = locationId === 'konfrontasi' ? 'CH1_CONFRONTATION_HUB' : `LOC_${locationId.toUpperCase()}`;
+
+          // Hoax Cascade Interruption Logic
+          if (ticker >= 3 && currentHoaxWave === 1) {
+            setInterruptedTarget(targetSceneId);
+            setProgress({ ...progress, currentSceneId: 'WAVE_2_ALERT' });
+            setScreen('phone');
+            return;
+          }
+          if (ticker >= 6 && currentHoaxWave === 2) {
+            setInterruptedTarget(targetSceneId);
+            setProgress({ ...progress, currentSceneId: 'WAVE_3_ALERT' });
+            setScreen('phone');
+            return;
+          }
+          if (ticker >= 9 && currentHoaxWave === 3) {
+            setInterruptedTarget(targetSceneId);
+            setProgress({ ...progress, currentSceneId: 'WAVE_4_ALERT' });
+            setScreen('phone');
+            return;
+          }
+          if (ticker >= 12 && currentHoaxWave === 4) {
+            setInterruptedTarget(targetSceneId);
+            setProgress({ ...progress, currentSceneId: 'WAVE_5_ALERT' });
+            setScreen('phone');
+            return;
+          }
+
+          if (locationId === 'konfrontasi') {
+            setProgress({ ...progress, currentSceneId: 'CH1_CONFRONTATION_HUB' });
+            setScreen('visual_novel');
+            return;
+          }
+
+          // If no interruption, route to the location's entry scene
+          const sceneId = `LOC_${locationId.toUpperCase()}`;
+          const nextScene = chapter1.scenes.find((s) => s.id === sceneId);
+          setProgress({ ...progress, currentSceneId: sceneId });
+          if (nextScene) {
+            setScreen(MODE_TO_SCREEN[nextScene.mode] || 'story');
+          } else {
+            setScreen('story');
+          }
+        }}
         onOpenBoard={() => setScreen('board')}
         onOpenInspection={() => setScreen('inspection')}
-        onContinueStory={() => setScreen('story')}
         canInspect={canInspect}
       />
     );
-  }
-
-  if (screen === 'phone') {
-    const { currentIndex: dialogIdx } = useDialogStore.getState();
-    return (
+  } else if (screen === 'phone') {
+    activeScreenComponent = (
       <div className="absolute inset-0 overflow-hidden">
         {currentScene?.background && (
           <Background src={`/assets/backgrounds/${currentScene.background}.jpg`} />
@@ -221,7 +282,17 @@ function App() {
           onTap={handleTap}
           onContinue={() => {
             resetDialog();
-            const newProgress = advanceScene(chapter1, useGameStore.getState().progress);
+            let newProgress = advanceScene(chapter1, useGameStore.getState().progress);
+            
+            if (currentScene?.id.startsWith('WAVE_') && currentScene.id.endsWith('_ALERT')) {
+              newProgress = { ...newProgress, currentHoaxWave: newProgress.currentHoaxWave + 1 };
+              
+              if (interruptedTarget) {
+                newProgress.currentSceneId = interruptedTarget;
+                setInterruptedTarget(null);
+              }
+            }
+
             setProgress(newProgress);
             const nextScene = chapter1.scenes.find(
               (s) => s.id === newProgress.currentSceneId,
@@ -231,10 +302,21 @@ function App() {
         />
       </div>
     );
-  }
-
-  if (screen === 'board') {
-    return (
+  } else if (screen === 'exploration') {
+    activeScreenComponent = (
+      <ExplorationScreen
+        scene={currentScene!}
+        inventory={collectedEvidenceData}
+        visitedSceneIds={progress.visitedSceneIds || []}
+        onAction={(sceneId) => {
+          setProgress({ ...progress, currentSceneId: sceneId });
+          setScreen('visual_novel');
+        }}
+        onBack={() => setScreen('hub')}
+      />
+    );
+  } else if (screen === 'board') {
+    activeScreenComponent = (
       <BoardScreen
         evidences={collectedEvidenceData}
         rules={chapter1.rules}
@@ -244,10 +326,8 @@ function App() {
         onBack={() => setScreen('hub')}
       />
     );
-  }
-
-  if (screen === 'inspection') {
-    return (
+  } else if (screen === 'inspection') {
+    activeScreenComponent = (
       <InspectionScreen
         evidences={collectedEvidenceData}
         claimRules={chapter1.claimRules}
@@ -256,40 +336,38 @@ function App() {
         onBack={() => setScreen('hub')}
       />
     );
-  }
-
-  if (screen === 'confrontation') {
+  } else if (screen === 'confrontation') {
     const dialogue =
       currentScene?.dialogues?.map((d) => ({
         speaker: d.speaker,
         text: d.text,
       })) ?? [];
-    return (
+    activeScreenComponent = (
       <ConfrontationScreen
         background={currentScene?.background}
         dialogue={dialogue}
         onContinue={() => {
           resetDialog();
-          setScreen('hub');
+          setScreen('decision');
         }}
       />
     );
-  }
-
-  if (screen === 'decision') {
-    return (
+  } else if (screen === 'decision') {
+    const availableDecisions = chapter1.editorialDecisions.filter(
+      (d) => !d.requiredEvidenceIds || d.requiredEvidenceIds.every((id) => progress.collectedEvidenceIds.includes(id))
+    );
+    activeScreenComponent = (
       <DecisionScreen
-        decisions={chapter1.editorialDecisions}
+        decisions={availableDecisions}
         onChoose={(decisionId) => {
           useGameStore.getState().addChoice(decisionId);
           setScreen('reflection');
         }}
       />
     );
-  }
-
-  if (screen === 'reflection') {
-    const defaultOutcome: EditorialOutcome = {
+  } else if (screen === 'reflection') {
+    const lastChoiceId = (progress.choices.length > 0 ? progress.choices[progress.choices.length - 1] : '') as string;
+    const outcome = chapter1.editorialOutcomes?.[lastChoiceId] || {
       tier: 'partial',
       title: 'Refleksi',
       narrative: 'Kamu telah menyelesaikan investigasi ini.',
@@ -297,45 +375,59 @@ function App() {
       rumorSpreadDelta: 0,
       reflectionBullets: [
         'Selalu verifikasi informasi sebelum menyebarkan.',
-        'Perhatikan sumber dan kredibilitas bukti.',
-        'Pertimbangkan dampak dari keputusan publikasi.',
       ],
     };
-    return (
+    activeScreenComponent = (
       <ReflectionScreen
         background={currentScene?.background}
-        outcome={defaultOutcome}
+        outcome={outcome}
         collectedEvidence={collectedEvidenceData}
         missedEvidence={chapter1.evidences.filter(
           (e) => !progress.collectedEvidenceIds.includes(e.id),
         )}
         onRestart={() => {
           resetDialog();
+          useEvidenceStore.getState().resetAll();
           resetGame();
         }}
       />
     );
-  }
-
-  // Story screen (default)
-  if (!currentScene) {
-    return (
-      <div className="absolute inset-0 flex items-center justify-center bg-navy-900">
-        <p className="text-navy-400 font-medium">Scene tidak ditemukan</p>
+  } else if (!currentScene) {
+    activeScreenComponent = (
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#09090B] text-white space-y-4">
+        <p className="text-red-500 font-bold text-xl">Scene tidak ditemukan</p>
+        <p className="text-gray-400">ID: {progress.currentSceneId}</p>
+        <button
+          onClick={() => {
+            resetDialog();
+            useEvidenceStore.getState().resetAll();
+            resetGame();
+            setScreen('landing');
+          }}
+          className="px-6 py-2 bg-white text-black font-bold uppercase tracking-widest text-xs rounded-full hover:bg-gray-200 transition-colors"
+        >
+          Reset Game
+        </button>
       </div>
+    );
+  } else {
+    activeScreenComponent = (
+      <>
+        <StoryScreen
+          scene={currentScene}
+          currentLine={currentLine}
+          inventory={collectedEvidenceData}
+          onChoose={handleChoiceSelect}
+          onTapDialog={handleTap}
+          isDialogComplete={isComplete}
+        />
+      </>
     );
   }
 
   return (
     <>
-      <StoryScreen
-        scene={currentScene}
-        currentLine={currentLine}
-        inventory={collectedEvidenceData}
-        onChoose={handleChoiceSelect}
-        onTapDialog={handleTap}
-        isDialogComplete={isComplete}
-      />
+      {activeScreenComponent}
 
       {/* New Evidence Toast */}
       <AnimatePresence>
@@ -355,28 +447,38 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* HUD overlay */}
-      <div className="absolute top-4 left-4 z-40">
-        <div className="text-[10px] px-4 py-2 rounded-full bg-[#09090B]/80 border border-[#27272A] text-[#A1A1AA] backdrop-blur-md font-bold tracking-widest uppercase shadow-lg">
-          {currentScene.title}
+      {/* Screen-specific HUD overlays */}
+      {['story', 'visual_novel'].includes(screen) && (
+        <>
+          <div className="absolute top-4 left-4 z-40 pointer-events-none">
+            <div className="text-[10px] px-4 py-2 rounded-full bg-[#09090B]/80 border border-[#27272A] text-[#A1A1AA] backdrop-blur-md font-bold tracking-widest uppercase shadow-lg inline-block">
+              {currentScene?.title ?? 'Investigasi'}
+            </div>
+          </div>
+          
+          <div className="absolute top-4 right-16 z-40 flex items-center gap-3">
+            <button
+              onClick={() => setShowEvidence(true)}
+              className="text-[10px] px-4 py-2 rounded-full bg-[#09090B]/80 hover:bg-[#18181B] hover:border-[#3F3F46] border border-[#27272A] text-[#FAFAFA] backdrop-blur-md shadow-lg flex items-center gap-2 font-bold tracking-widest uppercase transition-colors"
+            >
+              <Search size={14} className="text-[#E11D48]" />
+              <span>{progress.collectedEvidenceIds.length} Berkas</span>
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Global Settings Button */}
+      {screen !== 'landing' && (
+        <div className="absolute top-4 right-4 z-50">
+          <button
+            onClick={() => setShowSettings(true)}
+            className="p-2 rounded-full bg-[#09090B]/80 hover:bg-[#18181B] border border-[#27272A] hover:border-[#3F3F46] text-[#FAFAFA] transition-colors backdrop-blur-md shadow-lg flex items-center justify-center"
+          >
+            <Settings size={18} />
+          </button>
         </div>
-      </div>
-      
-      <div className="absolute top-4 right-4 z-40 flex items-center gap-3">
-        <button
-          onClick={() => setShowEvidence(true)}
-          className="text-[10px] px-4 py-2 rounded-full bg-[#09090B]/80 hover:bg-[#18181B] hover:border-[#3F3F46] border border-[#27272A] text-[#FAFAFA] backdrop-blur-md shadow-lg flex items-center gap-2 font-bold tracking-widest uppercase transition-colors"
-        >
-          <Search size={14} className="text-[#E11D48]" />
-          <span>{progress.collectedEvidenceIds.length} Berkas</span>
-        </button>
-        <button
-          onClick={() => setShowSettings(true)}
-          className="pointer-events-auto p-2 rounded-full bg-[#09090B]/80 hover:bg-[#18181B] border border-[#27272A] hover:border-[#3F3F46] text-[#FAFAFA] transition-colors backdrop-blur-md shadow-lg flex items-center justify-center"
-        >
-          <Settings size={18} />
-        </button>
-      </div>
+      )}
 
       {/* In-Game Evidence Inventory Modal */}
       <AnimatePresence>

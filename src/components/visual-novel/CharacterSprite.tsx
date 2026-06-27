@@ -46,7 +46,11 @@ export function CharacterSprite({
           draggable={false}
           onError={(e) => {
             const target = e.currentTarget;
-            target.style.display = 'none';
+            if (!target.src.endsWith('_neutral.png')) {
+              target.src = `/assets/characters/${characterId}/${characterId}_neutral.png`;
+            } else {
+              target.style.display = 'none';
+            }
           }}
         />
       </motion.div>

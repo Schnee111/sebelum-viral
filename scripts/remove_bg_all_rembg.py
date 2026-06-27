@@ -8,16 +8,8 @@ def process_all_rembg():
     # We will map them to their corresponding destinations
     
     mapping = {
-        "nala_sprite_1782385311852.jpg": "public/assets/characters/nala/nala_neutral.png",
-        "nala_curious_1782386540110.jpg": "public/assets/characters/nala/nala_curious.png",
-        "nala_determined_1782386571888.jpg": "public/assets/characters/nala/nala_determined.png",
-        "nala_shocked_1782386550069.jpg": "public/assets/characters/nala/nala_shocked.png",
-        "nala_worried_1782386560410.jpg": "public/assets/characters/nala/nala_worried.png",
-        "aldi_sprite_1782385505161.jpg": "public/assets/characters/aldi/aldi_neutral.png",
-        "aldi_confused_1782389627657.jpg": "public/assets/characters/aldi/aldi_confused.png",
-        "aldi_defensive_1782389641336.jpg": "public/assets/characters/aldi/aldi_defensive.png",
-        "lala_sprite_1782385516385.jpg": "public/assets/characters/lala/lala_neutral.png",
-        "rendra_sprite_1782385527446.jpg": "public/assets/characters/rendra/rendra_neutral.png"
+        "bintang_neutral_1782564681179.jpg": "public/assets/characters/bintang/bintang_neutral.png",
+        "busalma_neutral_1782564692098.jpg": "public/assets/characters/busalma/busalma_neutral.png"
     }
     
     artifact_dir = r"C:\Users\Daffa\.gemini\antigravity-cli\brain\49d8819e-2b27-490f-b6e7-c2571905d5c6"

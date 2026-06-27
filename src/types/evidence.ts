@@ -60,6 +60,7 @@ export interface EditorialDecision {
   label: string;
   description: string;
   summary: string;
+  requiredEvidenceIds?: string[];
 }
 
 export interface EditorialOutcome {

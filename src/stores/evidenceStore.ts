@@ -14,6 +14,7 @@ interface EvidenceState {
   selectNode: (evidenceId: string) => void;
   clearSelection: () => void;
   resetBoard: () => void;
+  resetAll: () => void;
   getEvidenceById: (id: string) => Evidence | undefined;
   isOnBoard: (evidenceId: string) => boolean;
   getEdgeBetween: (nodeA: string, nodeB: string) => BoardEdge | undefined;
@@ -59,6 +60,15 @@ export const useEvidenceStore = create<EvidenceState>((set, get) => ({
 
   resetBoard: () =>
     set({
+      boardNodes: [],
+      boardEdges: [],
+      selectedNodeA: null,
+      selectedNodeB: null,
+    }),
+
+  resetAll: () =>
+    set({
+      inventory: [],
       boardNodes: [],
       boardEdges: [],
       selectedNodeA: null,

@@ -7,3 +7,4 @@ export { ConfrontationScreen } from './ConfrontationScreen';
 export { DecisionScreen } from './DecisionScreen';
 export { ReflectionScreen } from './ReflectionScreen';
 export { SettingsModal } from './SettingsModal';
+export { ExplorationScreen } from './ExplorationScreen';

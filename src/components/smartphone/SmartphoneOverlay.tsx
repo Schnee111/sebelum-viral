@@ -131,12 +131,27 @@ export function SmartphoneOverlay({
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [currentIndex]);
+  }, [currentIndex, visibleLines]);
+
+  // Auto-advance logic for fast-scrolling comments
+  useEffect(() => {
+    if (isComplete) return;
+    const currentLine = dialogues[currentIndex];
+    if (currentLine?.autoAdvance) {
+      const delay = currentLine.autoAdvanceDelay || 1000;
+      const timer = setTimeout(() => {
+        onTap();
+      }, delay);
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, dialogues, isComplete, onTap]);
 
   const handleTap = () => {
     if (isComplete) {
       onContinue();
     } else {
+      // Prevent manual tap if autoAdvance is handling it, to avoid double advancing, 
+      // or allow manual tap to skip the delay. Let's allow skip.
       onTap();
     }
   };

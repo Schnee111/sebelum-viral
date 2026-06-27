@@ -1,4 +1,4 @@
-import type { Evidence, EvidenceRule, ClaimInspectionRule, EditorialDecision } from './evidence';
+import type { Evidence, EvidenceRule, ClaimInspectionRule, EditorialDecision, EditorialOutcome } from './evidence';
 import type { Scene } from './scene';
 import type { RelationKind } from './evidence';
 
@@ -7,6 +7,8 @@ export type Screen =
   | 'story'
   | 'phone'
   | 'hub'
+  | 'visual_novel'
+  | 'exploration'
   | 'board'
   | 'inspection'
   | 'confrontation'
@@ -34,10 +36,14 @@ export interface RelationshipState {
 export interface GameProgress {
   currentSceneId: string;
   currentChapter: string;
+  currentHoaxWave: number;
+  unlockedLocations: string[];
+  ticker: number;
   collectedEvidenceIds: string[];
   foundInsightIds: string[];
   choices: string[];
   confrontedNpcs: string[];
+  visitedSceneIds: string[];
   playerState: PlayerState;
   relationships: RelationshipState;
 }
@@ -77,6 +83,7 @@ export interface ChapterData {
   rules: EvidenceRule[];
   claimRules: ClaimInspectionRule[];
   editorialDecisions: EditorialDecision[];
+  editorialOutcomes?: Record<string, EditorialOutcome>;
 }
 
 export const DEFAULT_PLAYER_STATE: PlayerState = {
@@ -100,10 +107,14 @@ export const DEFAULT_RELATIONSHIPS: RelationshipState = {
 export const DEFAULT_PROGRESS: GameProgress = {
   currentSceneId: 'CH1_S00',
   currentChapter: 'CH1',
+  currentHoaxWave: 1,
+  unlockedLocations: ['kantin', 'uks', 'mading'],
+  ticker: 0,
   collectedEvidenceIds: [],
   foundInsightIds: [],
   choices: [],
   confrontedNpcs: [],
+  visitedSceneIds: [],
   playerState: { ...DEFAULT_PLAYER_STATE },
   relationships: { ...DEFAULT_RELATIONSHIPS },
 };

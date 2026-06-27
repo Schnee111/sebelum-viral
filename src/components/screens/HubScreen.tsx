@@ -1,104 +1,187 @@
 import { motion } from 'framer-motion';
-import { Search, FileText, ArrowRight, ChevronRight, Hash, Eye } from 'lucide-react';
+import { Search, FileText, ChevronRight, Hash, Eye, MapPin, AlertCircle, Lock } from 'lucide-react';
 import type { Evidence } from '../../types';
 
 interface HubScreenProps {
   inventory: Evidence[];
   foundInsightIds: string[];
+  currentHoaxWave: number;
+  unlockedLocations: string[];
+  onSelectLocation: (locationId: string) => void;
   onOpenBoard: () => void;
   onOpenInspection: () => void;
-  onContinueStory: () => void;
   canInspect: boolean;
 }
+
+const LOCATION_DETAILS: Record<string, { title: string, desc: string }> = {
+  'kantin': { title: 'Kantin Sekolah', desc: 'Tempat Rendra biasa nongkrong. Tanya soal chat awal.' },
+  'uks': { title: 'Ruang UKS', desc: 'Aldi masih di sini. Cari tahu soal chat "markup nilai".' },
+  'mading': { title: 'Ruang Mading', desc: 'Kak Lala menunggu update investigasi.' },
+  'bk': { title: 'Ruang BK', desc: 'Bu Salma menyimpan data nilai rapor angkatan.' },
+  'lapangan': { title: 'Lapangan Basket', desc: 'Bintang sering latihan di sini. Tanya soal lomba.' }
+};
 
 export function HubScreen({
   inventory,
   foundInsightIds,
+  currentHoaxWave,
+  unlockedLocations,
+  onSelectLocation,
   onOpenBoard,
   onOpenInspection,
-  onContinueStory,
   canInspect,
 }: HubScreenProps) {
   return (
     <div className="absolute inset-0 bg-[#09090B] flex flex-col font-body text-[#FAFAFA] overflow-hidden">
       
-      {/* Top Header - Minimalist */}
-      <div className="px-8 pt-12 pb-6">
-        <h2 className="font-heading text-4xl font-bold tracking-tight mb-2">Workspace</h2>
+      {/* Top Header */}
+      <div className="px-8 pt-16 pb-6 border-b border-[#27272A]">
+        <div className="flex justify-between items-end mb-2">
+          <h2 className="font-heading text-4xl font-bold tracking-tight">Investigasi</h2>
+          <div className="flex items-center gap-2 bg-[#E11D48]/10 text-[#E11D48] border border-[#E11D48]/30 px-3 py-1.5 rounded-full">
+            <AlertCircle size={14} />
+            <span className="text-[10px] font-bold tracking-widest uppercase">
+              Gelombang Hoax {currentHoaxWave} / 5
+            </span>
+          </div>
+        </div>
         <div className="flex items-center gap-6 text-[11px] font-bold tracking-widest uppercase text-[#A1A1AA]">
           <span className="flex items-center gap-2">
-            <Hash size={14} /> {inventory.length} Evidences
+            <Hash size={14} /> {inventory.length} Berkas
           </span>
           <span className="flex items-center gap-2">
-            <Eye size={14} /> {foundInsightIds.length} Insights
+            <Eye size={14} /> {foundInsightIds.length} Fakta
           </span>
         </div>
       </div>
 
       {/* Main Content Split */}
-      <div className="flex-1 flex flex-col md:flex-row gap-12 px-8 pb-12 overflow-y-auto">
+      <div className="flex-1 flex flex-col md:flex-row gap-12 px-8 py-8 overflow-y-auto">
         
-        {/* Navigation List */}
-        <div className="flex-1 flex flex-col gap-2 max-w-xl">
-          <motion.button
-            className="group relative w-full p-6 text-left flex items-center justify-between overflow-hidden rounded-xl border border-transparent hover:bg-[#18181B] hover:border-[#27272A] transition-all"
-            onClick={onOpenBoard}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-          >
-            <div>
-              <div className="flex items-center gap-3 mb-1">
-                <Search size={16} className="text-[#E11D48]" />
-                <span className="text-sm font-bold tracking-widest uppercase">Detective Board</span>
-              </div>
-              <div className="text-sm text-[#71717A] ml-7">Hubungkan bukti dan temukan pola kasus</div>
+        {/* Navigation List - Locations */}
+        <div className="flex-1 flex flex-col gap-6 max-w-xl">
+          
+          <div>
+            <h3 className="text-[10px] font-bold text-[#71717A] tracking-widest uppercase mb-4">Lokasi Tersedia</h3>
+            <div className="flex flex-col gap-2">
+              {Object.entries(LOCATION_DETAILS).map(([locId, loc]) => {
+                const isUnlocked = unlockedLocations.includes(locId);
+                return (
+                  <motion.button
+                    key={locId}
+                    disabled={!isUnlocked}
+                    className={`group relative w-full p-4 text-left flex items-center justify-between overflow-hidden rounded-xl border transition-all ${
+                      isUnlocked 
+                        ? 'border-[#27272A] bg-[#18181B] hover:border-[#E11D48]/50 hover:bg-[#E11D48]/5 cursor-pointer'
+                        : 'border-[#27272A]/30 bg-[#18181B]/30 opacity-50 cursor-not-allowed'
+                    }`}
+                    onClick={() => isUnlocked && onSelectLocation(locId)}
+                    whileHover={isUnlocked ? { scale: 1.01 } : {}}
+                    whileTap={isUnlocked ? { scale: 0.99 } : {}}
+                  >
+                    <div>
+                      <div className="flex items-center gap-3 mb-1">
+                        {isUnlocked ? (
+                          <MapPin size={16} className="text-[#E11D48]" />
+                        ) : (
+                          <Lock size={16} className="text-[#71717A]" />
+                        )}
+                        <span className="text-sm font-bold">{loc.title}</span>
+                      </div>
+                      <div className="text-xs text-[#71717A] ml-7">
+                        {isUnlocked ? loc.desc : 'Lokasi belum terbuka...'}
+                      </div>
+                    </div>
+                    {isUnlocked && (
+                      <ChevronRight size={18} className="text-[#3F3F46] group-hover:text-[#E11D48] transition-colors" />
+                    )}
+                  </motion.button>
+                )
+              })}
             </div>
-            <ChevronRight size={18} className="text-[#3F3F46] group-hover:text-[#FAFAFA] transition-colors" />
-          </motion.button>
+          </div>
 
-          {canInspect && (
-            <motion.button
-              className="group relative w-full p-6 text-left flex items-center justify-between overflow-hidden rounded-xl border border-transparent hover:bg-[#18181B] hover:border-[#27272A] transition-all"
-              onClick={onOpenInspection}
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
-            >
-              <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <FileText size={16} className="text-[#E11D48]" />
-                  <span className="text-sm font-bold tracking-widest uppercase">Cross-Check</span>
+          <div className="h-px w-full bg-[#27272A]" />
+
+          <div>
+            <h3 className="text-[10px] font-bold text-[#71717A] tracking-widest uppercase mb-4">Tools</h3>
+            <div className="flex flex-col gap-2">
+              <motion.button
+                className="group relative w-full p-4 text-left flex items-center justify-between overflow-hidden rounded-xl border border-transparent hover:bg-[#18181B] hover:border-[#27272A] transition-all"
+                onClick={onOpenBoard}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+              >
+                <div>
+                  <div className="flex items-center gap-3 mb-1">
+                    <Search size={16} className="text-[#FAFAFA]" />
+                    <span className="text-sm font-bold">Papan Detektif</span>
+                  </div>
+                  <div className="text-xs text-[#71717A] ml-7">Hubungkan bukti & cari pola</div>
                 </div>
-                <div className="text-sm text-[#71717A] ml-7">Sandingkan klaim dengan bukti</div>
-              </div>
-              <ChevronRight size={18} className="text-[#3F3F46] group-hover:text-[#FAFAFA] transition-colors" />
-            </motion.button>
-          )}
+                <ChevronRight size={18} className="text-[#3F3F46] group-hover:text-[#FAFAFA] transition-colors" />
+              </motion.button>
 
-          <div className="h-px w-full bg-[#27272A] my-4" />
+              {canInspect && (
+                <motion.button
+                  className="group relative w-full p-4 text-left flex items-center justify-between overflow-hidden rounded-xl border border-transparent hover:bg-[#18181B] hover:border-[#27272A] transition-all"
+                  onClick={onOpenInspection}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                >
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <FileText size={16} className="text-[#FAFAFA]" />
+                      <span className="text-sm font-bold">Cross-Check Klaim</span>
+                    </div>
+                    <div className="text-xs text-[#71717A] ml-7">Sandingkan klaim rumor dengan bukti</div>
+                  </div>
+                  <ChevronRight size={18} className="text-[#3F3F46] group-hover:text-[#FAFAFA] transition-colors" />
+                </motion.button>
+              )}
 
-          <motion.button
-            className="group relative w-full p-6 text-left flex items-center justify-between overflow-hidden rounded-xl border border-transparent hover:bg-[#18181B] hover:border-[#27272A] transition-all"
-            onClick={onContinueStory}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-          >
-            <div>
-              <div className="flex items-center gap-3 mb-1">
-                <ArrowRight size={16} className="text-[#E11D48]" />
-                <span className="text-sm font-bold tracking-widest uppercase">Lanjut Narasi</span>
-              </div>
-              <div className="text-sm text-[#71717A] ml-7">Kembali ke cerita utama</div>
+              {foundInsightIds.includes('INS_CH1_REAL_CULPRIT_CLUE') ? (
+                <motion.button
+                  className="group relative w-full p-4 text-left flex items-center justify-between overflow-hidden rounded-xl border border-[#E11D48] bg-[#E11D48]/10 hover:bg-[#E11D48]/20 transition-all shadow-[0_0_15px_rgba(225,29,72,0.3)]"
+                  onClick={() => onSelectLocation('konfrontasi')}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                >
+                  <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      <AlertCircle size={16} className="text-[#E11D48]" />
+                      <span className="text-sm font-bold text-white">Konfrontasi Pelaku</span>
+                    </div>
+                    <div className="text-xs text-[#FAFAFA]/70 ml-7">Kamu telah menemukan korelasi bukti pamungkas.</div>
+                  </div>
+                  <ChevronRight size={18} className="text-[#E11D48] group-hover:text-[#FAFAFA] transition-colors" />
+                </motion.button>
+              ) : (
+                inventory.length >= 4 && (
+                  <motion.div
+                    className="w-full p-4 text-left flex items-center justify-between overflow-hidden rounded-xl border border-[#10B981]/50 bg-[#10B981]/10 shadow-[0_0_15px_rgba(16,185,129,0.2)] animate-pulse"
+                  >
+                    <div>
+                      <div className="flex items-center gap-3 mb-1">
+                        <Search size={16} className="text-[#10B981]" />
+                        <span className="text-sm font-bold text-white">Petunjuk Tersembunyi</span>
+                      </div>
+                      <div className="text-xs text-[#FAFAFA]/70 ml-7">Gunakan Papan Detektif untuk menghubungkan bukti-bukti yang sudah kamu kumpulkan!</div>
+                    </div>
+                  </motion.div>
+                )
+              )}
             </div>
-            <ChevronRight size={18} className="text-[#3F3F46] group-hover:text-[#FAFAFA] transition-colors" />
-          </motion.button>
+          </div>
+
         </div>
 
-        {/* Evidence List - Minimalist Text List */}
+        {/* Evidence List */}
         <div className="flex-1 md:border-l md:border-[#27272A] md:pl-12">
-          <h3 className="text-[10px] font-bold text-[#71717A] tracking-widest uppercase mb-6">Berkas Terkumpul</h3>
+          <h3 className="text-[10px] font-bold text-[#71717A] tracking-widest uppercase mb-6">Berkas di Case File</h3>
           <div className="flex flex-col gap-3">
             {inventory.length === 0 ? (
-              <div className="text-sm text-[#52525B] italic">Belum ada berkas.</div>
+              <div className="text-sm text-[#52525B] italic">Case file masih kosong. Mulai keliling sekolah.</div>
             ) : (
               inventory.map((evidence, i) => (
                 <motion.div

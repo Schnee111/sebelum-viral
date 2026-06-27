@@ -14,8 +14,16 @@ export function advanceScene(
 
   // Collect evidence from this scene
   const collected = new Set(progress.collectedEvidenceIds);
-  for (const evidenceId of scene.unlockEvidenceIds) {
+  for (const evidenceId of scene.unlockEvidenceIds || []) {
     collected.add(evidenceId);
+  }
+
+  // Collect unlocked locations from this scene
+  const unlockedLocs = new Set(progress.unlockedLocations);
+  if (scene.unlockLocationIds) {
+    for (const locId of scene.unlockLocationIds) {
+      unlockedLocs.add(locId);
+    }
   }
 
   // Record choice if it belongs to this scene
@@ -59,12 +67,28 @@ export function advanceScene(
     }
   }
 
+  let newTicker = progress.ticker;
+  if (selectedChoiceId && choiceBelongsToScene) {
+    const choice = scene.choices?.find((c) => c.id === selectedChoiceId);
+    if (choice?.nextSceneId) {
+      nextSceneId = choice.nextSceneId;
+    }
+    if (choice?.tickerDelta) {
+      newTicker += choice.tickerDelta;
+    }
+  }
+
+  const visitedSceneIds = Array.from(new Set([...(progress.visitedSceneIds || []), progress.currentSceneId]));
+
   return {
     ...progress,
     currentSceneId: nextSceneId ?? progress.currentSceneId,
     collectedEvidenceIds: Array.from(collected),
+    unlockedLocations: Array.from(unlockedLocs),
     choices,
+    visitedSceneIds,
     playerState,
+    ticker: newTicker,
   };
 }
 
