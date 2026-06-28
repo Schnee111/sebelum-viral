@@ -785,7 +785,13 @@ export const scenes: Scene[] = [
     nextSceneId: 'CH1_HUB',
     exploration: {
       talkSceneId: 'LOC_MADING_TALK',
-      characterId: 'lala'
+      characterId: 'lala',
+      investigationSceneId: 'LOC_MADING_INVESTIGATION',
+      defaultPresentSceneId: 'LOC_MADING_PRESENT_DEFAULT',
+      presentEvidenceRoutes: {
+        'EV_CH1_006': 'LOC_MADING_PRESENT_LOG'
+      },
+      interrogationScenes: ['LOC_MADING_INTEROGASI_SOFT']
     }
   },
   {
@@ -1036,70 +1042,7 @@ export const scenes: Scene[] = [
       { id: 'LLIH_5', speaker: 'bintang', expression: 'neutral', text: 'Kalah saing? Lo pikir gue lakuin ini karena takut kalah sama anak kayak dia?' },
       { id: 'LLIH_6', speaker: 'narrator', expression: 'neutral', text: 'Bintang terdiam, tapi ia menolak bicara lebih jauh tanpa bukti yang kuat.' }
     ],
-    unlockEvidenceIds: ['INS_CH1_BINTANG_MOTIVE'],
+    unlockEvidenceIds: ['EV_CH1_007'],
     nextSceneId: 'LOC_LAPANGAN'
-  },
-  {
-    id: 'WAVE_2_ALERT',
-    chapterId: 'CH1',
-    title: 'Notifikasi Darurat',
-    location: 'Smartphone',
-    mode: 'phone',
-    background: 'bg_phone',
-    characters: [],
-    dialogues: [
-      { id: 'W2_1', speaker: 'netizen1', expression: 'neutral', text: '@garudamenfess: Gila, ternyata nilainya si A emang melonjak drastis pas kelas 12!' },
-      { id: 'W2_2', speaker: 'netizen2', expression: 'neutral', text: 'Pantesan dapet kuota SNBP. Dikatrol gila-gilaan bro wkwk.' },
-      { id: 'W2_3', speaker: 'nala', expression: 'worried', text: '(Gawat... Rumornya merembet ke isu manipulasi nilai akademik! Kepanikan mulai terjadi.)' }
-    ],
-    unlockEvidenceIds: [],
-    nextSceneId: 'CH1_HUB'
-  },
-  {
-    id: 'WAVE_3_ALERT',
-    chapterId: 'CH1',
-    title: 'Notifikasi Darurat',
-    location: 'Smartphone',
-    mode: 'phone',
-    background: 'bg_phone',
-    characters: [],
-    dialogues: [
-      { id: 'W3_1', speaker: 'netizen1', expression: 'neutral', text: '@lambesekolah: Denger-denger, bukan cuma nilai rapot, lomba sains kemaren juga juri-nya disogok sama pihak A.' },
-      { id: 'W3_2', speaker: 'netizen3', expression: 'neutral', text: 'Wah parah sih, pantesan yang juara dia mulu.' },
-      { id: 'W3_3', speaker: 'nala', expression: 'shocked', text: '(Mereka mulai mengarang cerita tak berdasar. Aldi diserang dari semua sisi!)' }
-    ],
-    unlockEvidenceIds: [],
-    nextSceneId: 'CH1_HUB'
-  },
-  {
-    id: 'WAVE_4_ALERT',
-    chapterId: 'CH1',
-    title: 'Notifikasi Darurat',
-    location: 'Smartphone',
-    mode: 'phone',
-    background: 'bg_phone',
-    characters: [],
-    dialogues: [
-      { id: 'W4_1', speaker: 'netizen4', expression: 'neutral', text: 'Nih alamat rumah si anak titipan: Jl. Kenari No. 12. Spill nomor WhatsAppnya sekalian!' },
-      { id: 'W4_2', speaker: 'netizen2', expression: 'neutral', text: 'Gas serang sosmednya sekarang!!' },
-      { id: 'W4_3', speaker: 'nala', expression: 'angry', text: '(Doxxing... Ini sudah masuk ranah kriminal. Aku harus segera menyelesaikan investigasi ini!)' }
-    ],
-    unlockEvidenceIds: [],
-    nextSceneId: 'CH1_HUB'
-  },
-  {
-    id: 'WAVE_5_TIMEOUT',
-    chapterId: 'CH1',
-    title: 'Notifikasi Darurat',
-    location: 'Smartphone',
-    mode: 'phone',
-    background: 'bg_phone',
-    characters: [],
-    dialogues: [
-      { id: 'W5_1', speaker: 'netizen1', expression: 'neutral', text: 'Boikot sekolah Garuda! Jangan mau masuk sana kalau prestasinya hasil sogokan semua!' },
-      { id: 'W5_2', speaker: 'nala', expression: 'worried', text: '(Hoaksnya sudah menyebar ke publik luar sekolah. Waktuku benar-benar habis. Aku harus menarik kesimpulan sekarang!)' }
-    ],
-    unlockEvidenceIds: [],
-    nextSceneId: 'CH1_REFLECTION' // Force to reflection if time runs out
   }
 ];

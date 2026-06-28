@@ -102,6 +102,7 @@ function App() {
     if (currentScene.choices && currentScene.choices.length > 0) return;
 
     const timer = setTimeout(() => {
+      resetDialog();
       const newProgress = advanceScene(chapter1, useGameStore.getState().progress);
       setProgress(newProgress);
 
@@ -191,7 +192,7 @@ function App() {
   } else if (screen === 'landing') {
     return (
       <LandingScreen
-        hasSave={progress.currentSceneId !== 'scene-1' || progress.collectedEvidenceIds.length > 0} 
+        hasSave={progress.currentSceneId !== 'CH1_S00' || progress.collectedEvidenceIds.length > 0} 
         onStart={() => {
           useEvidenceStore.getState().resetAll();
           startGame();
@@ -312,7 +313,10 @@ function App() {
           setProgress({ ...progress, currentSceneId: sceneId });
           setScreen('visual_novel');
         }}
-        onBack={() => setScreen('hub')}
+        onBack={() => {
+          setProgress({ ...progress, currentSceneId: 'CH1_HUB' });
+          setScreen('hub');
+        }}
       />
     );
   } else if (screen === 'board') {

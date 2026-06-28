@@ -46,7 +46,7 @@ export const evidences: Evidence[] = [
     relatedEvidenceIds: ['EV_CH1_002'],
     contradictionWith: [],
     learningPoint: 'Screenshot tanpa konteks sangat mudah direkayasa atau disalahartikan.',
-    unlockSceneId: 'CH1_S02', // After Nala sees it in Mading
+    unlockSceneId: 'CH1_S00', // Unlocked along with the hoax post
     visual: 'evidence/chat_grup.png',
   },
   {
@@ -62,7 +62,7 @@ export const evidences: Evidence[] = [
     relatedEvidenceIds: ['EV_CH1_005'],
     contradictionWith: [],
     learningPoint: 'Testimoni dari tangan kedua (Rendra mendengar dari Bintang) butuh verifikasi langsung.',
-    unlockSceneId: 'LOC_KANTIN_INTEROGASI',
+    unlockSceneId: 'LOC_KANTIN_INTEROGASI_HARD',
     visual: 'evidence/komentar_siswa.png',
   },
   {
@@ -78,7 +78,7 @@ export const evidences: Evidence[] = [
     relatedEvidenceIds: ['EV_CH1_004', 'EV_CH1_006'],
     contradictionWith: ['EV_CH1_002'],
     learningPoint: 'Alibi subjek tertuduh harus dicocokkan dengan bukti fisik di tempat kejadian (log komputer).',
-    unlockSceneId: 'LOC_UKS_INTEROGASI',
+    unlockSceneId: 'LOC_UKS_INTEROGASI_HARD',
     visual: 'evidence/klarifikasi_aldi.png',
   },
   {
@@ -94,7 +94,23 @@ export const evidences: Evidence[] = [
     relatedEvidenceIds: ['EV_CH1_005'],
     contradictionWith: [],
     learningPoint: 'Bukti digital yang sah (log sistem) dapat membuktikan adanya aktivitas tidak wajar.',
-    unlockSceneId: 'LOC_BK_INTEROGASI',
+    unlockSceneId: 'LOC_BK_INTEROGASI_HARD',
     visual: 'evidence/rekap_dana.png',
+  },
+  {
+    id: 'EV_CH1_007',
+    title: 'Motif Bintang',
+    kind: 'insight',
+    source: 'Bintang',
+    claim: 'Bintang sengaja memanipulasi Rendra untuk memviralkan hoaks',
+    credibility: 'high',
+    entityTags: ['Bintang', 'Hoaks'],
+    timeTags: [],
+    locationTags: [],
+    relatedEvidenceIds: [],
+    contradictionWith: [],
+    learningPoint: 'Motif personal seringkali menjadi pemicu di balik penyebaran informasi palsu yang terstruktur.',
+    unlockSceneId: 'LOC_LAPANGAN_INTEROGASI_HARD',
+    visual: 'evidence/story_anonim.png',
   }
 ];
