@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, AlertCircle, Search, Zap, ArrowLeft, ChevronRight, X } from 'lucide-react';
+import { MessageSquare, Search, Zap, ArrowLeft, ChevronRight, X } from 'lucide-react';
 import { Background } from '../visual-novel/Background';
 import type { Scene, Evidence } from '../../types';
 

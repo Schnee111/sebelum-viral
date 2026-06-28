@@ -27,6 +27,7 @@ import {
   UserCheck,
   Camera,
   Eye,
+  Lightbulb,
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
@@ -98,6 +99,7 @@ const EVIDENCE_ICONS: Record<EvidenceKind, LucideIcon> = {
   testimony: UserCheck,
   photo: Camera,
   social_comment: MessageCircle,
+  insight: Lightbulb,
 };
 
 const KIND_LABELS: Record<EvidenceKind, string> = {
@@ -107,6 +109,7 @@ const KIND_LABELS: Record<EvidenceKind, string> = {
   testimony: 'Kesaksian',
   photo: 'Foto',
   social_comment: 'Komentar',
+  insight: 'Wawasan',
 };
 
 function getCredColor(c: string): string {

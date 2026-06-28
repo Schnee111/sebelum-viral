@@ -4,7 +4,8 @@ export type EvidenceKind =
   | 'chat'
   | 'testimony'
   | 'photo'
-  | 'social_comment';
+  | 'social_comment'
+  | 'insight';
 
 export type Credibility = 'low' | 'medium' | 'high';
 

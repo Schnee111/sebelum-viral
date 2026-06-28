@@ -23,7 +23,7 @@ import { useGameStore } from './stores/gameStore';
 import { useEvidenceStore } from './stores/evidenceStore';
 import { useDialog } from './hooks/useDialog';
 import { useDialogStore } from './stores/dialogStore';
-import type { Screen, BoardEdge, Scene, EditorialOutcome, Evidence } from './types';
+import type { Screen, BoardEdge, Scene, Evidence } from './types';
 
 const MODE_TO_SCREEN: Record<string, Screen> = {
   phone: 'phone',
