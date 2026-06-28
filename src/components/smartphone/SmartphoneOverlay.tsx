@@ -45,7 +45,7 @@ function classifyLine(line: DialogueLine): 'notification' | 'social_post' | 'cha
     if (/^[A-Z][a-z]+(?:\s[A-Z][a-z]+)?:\s/.test(text)) return 'chat_message';
 
     // Fallback: if it has quotes and a colon, likely chat
-    if (text.includes(': "') || text.includes(': "')) return 'chat_message';
+    if (text.includes(': "') || text.includes(': \u201c')) return 'chat_message';
 
     // Default system
     return 'notification';
@@ -59,7 +59,7 @@ function classifyLine(line: DialogueLine): 'notification' | 'social_post' | 'cha
  * Parse a chat message "Name: "text"" into sender + message parts.
  */
 function parseChatMessage(text: string): { sender: string; message: string } {
-  const match = text.match(/^([^:]+):\s*["""](.+)["""]?\s*$/);
+  const match = text.match(/^([^:]+):\s*[""\u201c](.+)[""\u201d]?\s*$/);
   if (match) {
     return { sender: match[1]!.trim(), message: match[2]!.trim() };
   }
@@ -68,7 +68,7 @@ function parseChatMessage(text: string): { sender: string; message: string } {
   if (colonIdx > 0) {
     return {
       sender: text.slice(0, colonIdx).trim(),
-      message: text.slice(colonIdx + 2).replace(/^["""]|["""]?$/g, '').trim(),
+      message: text.slice(colonIdx + 2).replace(/^[""\u201c]|[""\u201d]?$/g, '').trim(),
     };
   }
   return { sender: '???', message: text };
@@ -78,7 +78,7 @@ function parseChatMessage(text: string): { sender: string; message: string } {
  * Parse a social post "@handle: "text"" into handle + content parts.
  */
 function parseSocialPost(text: string): { handle: string; content: string } {
-  const match = text.match(/^(@\w+):\s*["""](.+)["""]?\s*$/);
+  const match = text.match(/^(@\w+):\s*[""\u201c](.+)[""\u201d]?\s*$/);
   if (match) {
     return { handle: match[1]!, content: match[2]!.trim() };
   }
@@ -150,8 +150,6 @@ export function SmartphoneOverlay({
     if (isComplete) {
       onContinue();
     } else {
-      // Prevent manual tap if autoAdvance is handling it, to avoid double advancing, 
-      // or allow manual tap to skip the delay. Let's allow skip.
       onTap();
     }
   };
@@ -163,10 +161,10 @@ export function SmartphoneOverlay({
     >
       {/* Phone frame with 3D Depth */}
       <div
-        className="relative flex flex-col overflow-hidden rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_0_2px_rgba(255,255,255,0.1),inset_0_0_20px_rgba(255,255,255,0.05)] transition-transform duration-500 hover:scale-[1.01]"
+        className="relative flex flex-col overflow-hidden rounded-[2rem] md:rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_0_0_2px_rgba(255,255,255,0.1),inset_0_0_20px_rgba(255,255,255,0.05)] transition-transform duration-500 hover:scale-[1.01]"
         style={{
-          width: 'min(400px, 90vw)',
-          height: 'min(720px, 88vh)',
+          width: 'min(400px, 92vw)',
+          height: 'min(720px, 92vh)',
           backgroundColor: '#0F172A',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.9), 0 0 0 8px #1E293B, 0 0 0 10px #0F172A, inset 0 0 20px rgba(0,0,0,0.5)',
         }}
@@ -183,7 +181,7 @@ export function SmartphoneOverlay({
 
           {/* Content area */}
           <div 
-            className="flex-1 overflow-y-auto px-5 py-4 space-y-4" 
+            className="flex-1 overflow-y-auto px-4 md:px-5 py-3 md:py-4 space-y-3 md:space-y-4" 
             style={{ scrollbarWidth: 'none' }}
           >
           <AnimatePresence initial={false}>
@@ -198,10 +196,10 @@ export function SmartphoneOverlay({
                     key={line.id}
                     initial={isNew ? { opacity: 0, y: -10 } : false}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex justify-center my-3"
+                    className="flex justify-center my-2 md:my-3"
                   >
                     <div
-                      className="text-[11px] font-bold tracking-wider px-4 py-1.5 rounded-full backdrop-blur-md shadow-sm border border-white/5 uppercase"
+                      className="text-[10px] md:text-[11px] font-bold tracking-wider px-3 md:px-4 py-1 md:py-1.5 rounded-full backdrop-blur-md shadow-sm border border-white/5 uppercase"
                       style={{
                         backgroundColor: 'rgba(255,255,255,0.05)',
                         color: '#94A3B8',
@@ -220,10 +218,10 @@ export function SmartphoneOverlay({
                     key={line.id}
                     initial={isNew ? { opacity: 0, scale: 0.95 } : false}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="flex justify-center my-4"
+                    className="flex justify-center my-3 md:my-4"
                   >
                     <div
-                      className="text-xs font-bold tracking-widest px-5 py-2 rounded-xl backdrop-blur-sm border border-navy-700/50 shadow-md"
+                      className="text-[10px] md:text-xs font-bold tracking-widest px-4 md:px-5 py-1.5 md:py-2 rounded-xl backdrop-blur-sm border border-navy-700/50 shadow-md"
                       style={{
                         backgroundColor: 'rgba(15,23,42,0.6)',
                         color: '#94A3B8',
@@ -245,7 +243,7 @@ export function SmartphoneOverlay({
                     className="my-2 px-2"
                   >
                     <p
-                      className="text-[11px] italic leading-relaxed text-center"
+                      className="text-[10px] md:text-[11px] italic leading-relaxed text-center"
                       style={{ color: '#8E8E93' }}
                     >
                       {line.text}
@@ -261,10 +259,10 @@ export function SmartphoneOverlay({
                     key={line.id}
                     initial={isNew ? { opacity: 0, y: 5 } : false}
                     animate={{ opacity: 1, y: 0 }}
-                    className="my-3 px-2 flex justify-center"
+                    className="my-2 md:my-3 px-2 flex justify-center"
                   >
                     <div
-                      className="text-[12px] font-medium leading-relaxed px-4 py-2.5 rounded-2xl border backdrop-blur-md shadow-md max-w-[90%] text-center"
+                      className="text-[11px] md:text-[12px] font-medium leading-relaxed px-3 md:px-4 py-2 md:py-2.5 rounded-2xl border backdrop-blur-md shadow-md max-w-[90%] text-center"
                       style={{
                         backgroundColor: 'rgba(139,92,246,0.15)',
                         borderColor: 'rgba(139,92,246,0.3)',
@@ -320,10 +318,10 @@ export function SmartphoneOverlay({
           {/* Tap indicator */}
           {!isComplete && (
             <div
-              className="flex-shrink-0 text-center py-3 bg-gradient-to-t from-black/80 to-transparent relative z-20"
+              className="flex-shrink-0 text-center py-2.5 md:py-3 bg-gradient-to-t from-black/80 to-transparent relative z-20"
             >
               <motion.span
-                className="text-[11px] font-bold tracking-widest uppercase text-white/50"
+                className="text-[10px] md:text-[11px] font-bold tracking-widest uppercase text-white/50"
                 animate={{ opacity: [0.3, 0.8, 0.3] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
@@ -334,11 +332,11 @@ export function SmartphoneOverlay({
 
           {isComplete && (
             <motion.div
-              className="flex-shrink-0 text-center py-4 bg-gradient-to-t from-black/80 to-transparent relative z-20"
+              className="flex-shrink-0 text-center py-3 md:py-4 bg-gradient-to-t from-black/80 to-transparent relative z-20"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <span className="text-xs font-bold tracking-widest uppercase text-game-accent drop-shadow-md">
+              <span className="text-[10px] md:text-xs font-bold tracking-widest uppercase text-game-accent drop-shadow-md">
                 Ketuk untuk keluar ▸
               </span>
             </motion.div>

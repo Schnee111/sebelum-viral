@@ -31,18 +31,18 @@ import {
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
-   Layout — Responsive Honeycomb Grid
+   Layout — Responsive Grid
    ───────────────────────────────────────────── */
 
 function getLayout(width: number, height: number, count: number) {
   if (width === 0 || height === 0) return { positions: [], totalHeight: 0 };
   
   const isDesktop = width >= 768;
-  const cols = isDesktop ? 4 : 2; 
+  const cols = isDesktop ? 4 : 2;
   
-  const paddingX = isDesktop ? Math.max(120, width * 0.15) : 100;
-  // Pad top/bottom more on mobile to avoid header/hud overlap
-  const paddingY = isDesktop ? 120 : 160;
+  // Much tighter padding on mobile
+  const paddingX = isDesktop ? Math.max(120, width * 0.15) : 24;
+  const paddingY = isDesktop ? 120 : 40;
   
   const usableHeight = Math.max(0, height - paddingY * 2);
   
@@ -69,7 +69,7 @@ function getLayout(width: number, height: number, count: number) {
     
     let x = isStaggered ? paddingX + step / 2 : paddingX;
     if (isStaggered && cols === 2) {
-      x = width / 2; // perfectly center the staggered row on mobile
+      x = width / 2;
     } else {
       x += currentItemInRow * step;
     }
@@ -185,6 +185,7 @@ export function BoardCanvas({
   const dragStartPos = useRef({ x: 0, y: 0 });
   const lastPos = useRef({ x: 0, y: 0 });
   const draggedId = useRef<string | null>(null);
+  const pointerDownTime = useRef(0);
 
   useEffect(() => {
     if (!containerRef) return;
@@ -237,7 +238,6 @@ export function BoardCanvas({
           evidenceB: evidences.find((e) => e.id === evidenceId)?.title ?? '',
         });
 
-        // Only draw lines for meaningful relations — skip irrelevant & unknown
         const NO_LINE_KINDS: RelationKind[] = ['irrelevant', 'unknown'];
         if (!NO_LINE_KINDS.includes(result.kind)) {
           const edge = createEdge(selectedA, evidenceId, result);
@@ -264,12 +264,12 @@ export function BoardCanvas({
   );
 
   const handlePointerDown = useCallback((e: React.PointerEvent, id: string) => {
-    // Only capture if it's the primary button (left click or touch)
     if (e.button !== 0) return;
     isDragging.current = false;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
     lastPos.current = { x: e.clientX, y: e.clientY };
     draggedId.current = id;
+    pointerDownTime.current = Date.now();
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
   }, []);
 
@@ -279,8 +279,11 @@ export function BoardCanvas({
     const dx = e.clientX - dragStartPos.current.x;
     const dy = e.clientY - dragStartPos.current.y;
     
-    // Drag threshold of 3 pixels
-    if (!isDragging.current && (Math.abs(dx) > 3 || Math.abs(dy) > 3)) {
+    // Higher threshold on touch (8px) vs mouse (3px)
+    const isTouch = e.pointerType === 'touch';
+    const threshold = isTouch ? 8 : 3;
+    
+    if (!isDragging.current && (Math.abs(dx) > threshold || Math.abs(dy) > threshold)) {
       isDragging.current = true;
     }
     
@@ -308,6 +311,8 @@ export function BoardCanvas({
     }
   }, []);
 
+  const isMobile = dimensions.width < 768;
+
   return (
     <div
       className="absolute inset-0 flex flex-col font-body"
@@ -315,7 +320,7 @@ export function BoardCanvas({
     >
       {/* ── Header ── */}
       <div
-        className="flex-shrink-0 flex items-center justify-between px-5 py-3 relative z-50"
+        className="flex-shrink-0 flex items-center justify-between px-4 md:px-5 py-2.5 md:py-3 relative z-50"
         style={{
           background: '#09090B',
           borderBottom: '1px solid rgba(255,255,255,0.1)',
@@ -324,21 +329,21 @@ export function BoardCanvas({
       >
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-sm font-semibold hover:text-white transition-colors"
+          className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm font-semibold hover:text-white transition-colors"
           style={{ color: '#A1A1AA' }}
         >
-          <ArrowLeft size={18} />
+          <ArrowLeft size={16} />
           <span>Kembali</span>
         </button>
 
         <div className="text-center">
           <div
-            className="text-base font-bold tracking-wide"
+            className="text-sm md:text-base font-bold tracking-wide"
             style={{ color: '#FAFAFA' }}
           >
             Papan Investigasi
           </div>
-          <div className="text-[10px] font-medium tracking-widest uppercase mt-0.5" style={{ color: '#71717A' }}>
+          <div className="text-[9px] md:text-[10px] font-medium tracking-widest uppercase mt-0.5" style={{ color: '#71717A' }}>
             Hubungkan Bukti
           </div>
         </div>
@@ -347,7 +352,7 @@ export function BoardCanvas({
           <div className="text-sm font-bold text-game-accent">
             {connectedCount}
           </div>
-          <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#71717A' }}>
+          <div className="text-[8px] md:text-[9px] font-bold uppercase tracking-widest" style={{ color: '#71717A' }}>
             Terhubung
           </div>
         </div>
@@ -357,6 +362,7 @@ export function BoardCanvas({
       <div 
         ref={setContainerRef}
         className="flex-1 relative overflow-hidden"
+        style={{ touchAction: 'none' }}
       >
         {/* Subtle dot grid background */}
         <div
@@ -395,7 +401,6 @@ export function BoardCanvas({
               );
               if (si < 0 || ti < 0) return null;
               
-              // Focus mode logic
               const isEdgeFocused = selectedA
                 ? edge.sourceNodeId === selectedA || edge.targetNodeId === selectedA
                 : true;
@@ -411,12 +416,10 @@ export function BoardCanvas({
               const x2 = t.x;
               const y2 = t.y;
 
-              // Straight, tight string for realistic detective board
               const d = `M${x1},${y1} L${x2},${y2}`;
 
               return (
                 <g key={edge.id}>
-                  {/* Soft shadow */}
                   <path
                     d={d}
                     fill="none"
@@ -426,7 +429,6 @@ export function BoardCanvas({
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
                   />
-                  {/* Main line (neon effect) */}
                   <motion.path
                     d={d}
                     fill="none"
@@ -446,7 +448,7 @@ export function BoardCanvas({
           </svg>
         )}
 
-        {/* Connection labels (HTML, positioned at line midpoints) */}
+        {/* Connection labels */}
         {dimensions.width > 0 && edges.map((edge) => {
           const si = evidences.findIndex((e) => e.id === edge.sourceNodeId);
           const ti = evidences.findIndex((e) => e.id === edge.targetNodeId);
@@ -456,18 +458,15 @@ export function BoardCanvas({
           const t = activePositions[ti];
           if (!s || !t) return null;
 
-          // Offset to 38% instead of 50% so it doesn't land exactly on staggered cards
           const f = 0.38;
           const mx = s.x + (t.x - s.x) * f;
           const my = s.y + (t.y - s.y) * f;
           const color = getEdgeColor(edge.kind ?? 'unknown');
 
-          // Focus mode logic for labels
           const isEdgeFocused = selectedA
             ? edge.sourceNodeId === selectedA || edge.targetNodeId === selectedA
             : true;
 
-          // Hide label completely if edge is dimmed or if it's 'unknown' to reduce extreme clutter
           if (!isEdgeFocused || edge.kind === 'unknown') return null;
 
           return (
@@ -478,7 +477,7 @@ export function BoardCanvas({
                 left: `${mx}px`,
                 top: `${my}px`,
                 transform: 'translate(-50%, -50%)',
-                zIndex: 45, // Floats above cards
+                zIndex: 45,
                 opacity: selectedA ? 1 : 0.85,
               }}
               initial={{ opacity: 0, scale: 0.8 }}
@@ -486,9 +485,9 @@ export function BoardCanvas({
               transition={{ delay: 0.4, duration: 0.25 }}
             >
               <div
-                className="px-2.5 py-0.5 rounded-md whitespace-nowrap"
+                className="px-2 md:px-2.5 py-0.5 rounded-md whitespace-nowrap"
                 style={{
-                  fontSize: '9px',
+                  fontSize: isMobile ? '8px' : '9px',
                   fontWeight: 600,
                   background: '#18181B',
                   border: `1px solid ${color}40`,
@@ -510,14 +509,12 @@ export function BoardCanvas({
 
           const isSelected = selectedA === evidence.id;
           
-          // Is this card globally connected to anything?
           const isConnectedGlobally = edges.some(
             (e) =>
               e.sourceNodeId === evidence.id ||
               e.targetNodeId === evidence.id,
           );
           
-          // Is this card connected specifically to the selected card?
           const isNeighborOfSelected = selectedA
             ? edges.some(
                 (e) =>
@@ -526,7 +523,6 @@ export function BoardCanvas({
               )
             : false;
 
-          // Determine card opacity based on Focus Mode
           const cardOpacity = selectedA
             ? (isSelected || isNeighborOfSelected ? 1 : 0.3)
             : 1;
@@ -542,7 +538,7 @@ export function BoardCanvas({
                 left: `${pos.x}px`,
                 top: `${pos.y}px`,
                 zIndex: isSelected ? 30 : isNeighborOfSelected ? 20 : isConnectedGlobally ? 15 : 10,
-                width: 'clamp(140px, 25vw, 180px)',
+                width: isMobile ? 'clamp(130px, 38vw, 160px)' : 'clamp(140px, 25vw, 180px)',
               }}
               initial={{ scale: 0, opacity: 0, x: "-50%", y: "-50%" }}
               animate={{ scale: 1, opacity: cardOpacity, x: "-50%", y: "-50%" }}
@@ -556,8 +552,8 @@ export function BoardCanvas({
               <motion.button
                 className="relative w-full text-left overflow-hidden group flex flex-col"
                 style={{
-                  padding: '14px 16px',
-                  borderRadius: '12px',
+                  padding: isMobile ? '10px 12px' : '14px 16px',
+                  borderRadius: isMobile ? '10px' : '12px',
                   background: isSelected
                     ? '#27272A'
                     : '#18181B',
@@ -571,6 +567,7 @@ export function BoardCanvas({
                     : '0 4px 20px rgba(0,0,0,0.3)',
                   cursor: isDragging.current ? 'grabbing' : 'pointer',
                   transition: 'background 0.2s, border 0.2s, box-shadow 0.2s',
+                  touchAction: 'none',
                 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -584,27 +581,26 @@ export function BoardCanvas({
                 }}
               >
                 {/* Header: Type Badge & Credibility */}
-                <div className="flex items-center justify-between mb-3 w-full">
+                <div className="flex items-center justify-between mb-2 md:mb-3 w-full">
                   <span
-                    className="inline-flex items-center px-2 py-1 rounded-md"
+                    className="inline-flex items-center px-1.5 md:px-2 py-0.5 md:py-1 rounded-md"
                     style={{
-                      fontSize: '9px',
+                      fontSize: isMobile ? '8px' : '9px',
                       fontWeight: 700,
                       background: 'rgba(255,255,255,0.08)',
                       color: '#D4D4D8',
                     }}
                   >
-                    <Icon size={10} className="mr-1.5" />
+                    <Icon size={isMobile ? 8 : 10} className="mr-1 md:mr-1.5" />
                     {KIND_LABELS[evidence.kind]}
                   </span>
                   
-                  {/* Credibility Dot + Text */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1 md:gap-1.5">
                     <div
                       className="w-1.5 h-1.5 rounded-full"
                       style={{ background: credColor, boxShadow: `0 0 6px ${credColor}` }}
                     />
-                    <span style={{ fontSize: '9px', color: credColor, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    <span style={{ fontSize: isMobile ? '7px' : '9px', color: credColor, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       {getCredLabel(evidence.credibility)}
                     </span>
                   </div>
@@ -613,15 +609,15 @@ export function BoardCanvas({
                 {/* Title */}
                 <div
                   style={{
-                    fontSize: '13px',
+                    fontSize: isMobile ? '11px' : '13px',
                     fontWeight: 700,
                     color: '#FAFAFA',
                     lineHeight: '1.4',
-                    marginBottom: '6px',
+                    marginBottom: isMobile ? '4px' : '6px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
-                    WebkitLineClamp: 2,
+                    WebkitLineClamp: isMobile ? 1 : 2,
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
@@ -630,26 +626,28 @@ export function BoardCanvas({
 
                 {/* Source */}
                 <div
-                  style={{ fontSize: '9px', color: '#71717A', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '8px' }}
+                  style={{ fontSize: isMobile ? '7px' : '9px', color: '#71717A', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: isMobile ? '4px' : '8px' }}
                 >
                   {evidence.source}
                 </div>
 
-                {/* Claim preview */}
-                <div
-                  style={{
-                    fontSize: '11px',
-                    color: '#A1A1AA',
-                    lineHeight: '1.5',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: 'vertical',
-                  }}
-                >
-                  {evidence.claim}
-                </div>
+                {/* Claim preview — hidden on mobile to save space */}
+                {!isMobile && (
+                  <div
+                    style={{
+                      fontSize: '11px',
+                      color: '#A1A1AA',
+                      lineHeight: '1.5',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                    }}
+                  >
+                    {evidence.claim}
+                  </div>
+                )}
 
                 {/* Connected dot indicator */}
                 {isConnectedGlobally && (
@@ -670,7 +668,7 @@ export function BoardCanvas({
                   <motion.div
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      borderRadius: '16px',
+                      borderRadius: isMobile ? '10px' : '16px',
                       border: '2px solid #FB7185',
                     }}
                     animate={{ opacity: [0.3, 0.8, 0.3] }}
@@ -686,10 +684,10 @@ export function BoardCanvas({
         <AnimatePresence>
           {selectedA && !lastResult && (
             <motion.div
-                className="fixed bottom-24 left-1/2 -translate-x-1/2 px-5 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
+                className="fixed bottom-20 md:bottom-24 left-1/2 -translate-x-1/2 px-4 md:px-5 py-2.5 md:py-3 rounded-xl md:rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] max-w-[90vw]"
                 style={{
                   zIndex: 40,
-                  fontSize: '12px',
+                  fontSize: isMobile ? '11px' : '12px',
                   fontWeight: 700,
                   background: '#09090B',
                   border: '1px solid rgba(245,158,11,0.3)',
@@ -705,18 +703,20 @@ export function BoardCanvas({
           )}
         </AnimatePresence>
 
-        {/* Evidence detail panel (shows selected evidence info) */}
+        {/* Evidence detail panel */}
         <AnimatePresence>
           {selectedEvidence && !lastResult && (
               <motion.div
-                className="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 md:w-96"
+                className="fixed bottom-4 md:bottom-6 left-3 right-3 md:left-auto md:right-6 md:w-96"
                 style={{
                   zIndex: 45,
-                  padding: '16px 20px',
-                  borderRadius: '20px',
+                  padding: isMobile ? '12px 14px' : '16px 20px',
+                  borderRadius: isMobile ? '16px' : '20px',
                   background: '#09090B',
                   border: '1px solid rgba(255,255,255,0.1)',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.8)',
+                  maxHeight: isMobile ? '40vh' : 'auto',
+                  overflowY: 'auto',
                 }}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -734,20 +734,20 @@ export function BoardCanvas({
                       }}
                     />
                     <span
-                      className="text-sm font-bold tracking-wide"
+                      className="text-xs md:text-sm font-bold tracking-wide truncate"
                       style={{ color: '#FAFAFA' }}
                     >
                       {selectedEvidence.title}
                     </span>
                   </div>
                   <div
-                    className="text-[11px] leading-relaxed font-medium"
+                    className="text-[10px] md:text-[11px] leading-relaxed font-medium"
                     style={{ color: '#A1A1AA' }}
                   >
                     {selectedEvidence.claim}
                   </div>
                   <div
-                    className="text-[9px] font-bold tracking-widest uppercase mt-2"
+                    className="text-[8px] md:text-[9px] font-bold tracking-widest uppercase mt-2"
                     style={{ color: '#71717A' }}
                   >
                     Sumber: <span className="text-game-accent">{selectedEvidence.source}</span>
@@ -758,7 +758,7 @@ export function BoardCanvas({
                   className="p-1.5 rounded-lg flex-shrink-0 bg-white/5 hover:bg-white/10 transition-colors"
                   style={{ color: '#D4D4D8' }}
                 >
-                  <X size={16} />
+                  <X size={14} />
                 </button>
               </div>
             </motion.div>
@@ -769,7 +769,7 @@ export function BoardCanvas({
         <AnimatePresence>
           {lastResult && (
             <motion.div
-              className="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 md:w-[400px]"
+              className="fixed bottom-4 md:bottom-6 left-3 right-3 md:left-auto md:right-6 md:w-[400px]"
               style={{ zIndex: 50 }}
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -777,20 +777,22 @@ export function BoardCanvas({
               transition={{ type: 'spring', stiffness: 300, damping: 28 }}
             >
               <div
-                className="relative flex flex-col gap-3 overflow-hidden"
+                className="relative flex flex-col gap-2 md:gap-3 overflow-hidden"
                 style={{
-                  padding: '16px 20px',
-                  borderRadius: '20px',
+                  padding: isMobile ? '12px 14px' : '16px 20px',
+                  borderRadius: isMobile ? '16px' : '20px',
                   background: '#09090B',
                   border: '1px solid rgba(255,255,255,0.1)',
                   boxShadow: `0 10px 30px rgba(0,0,0,0.8)`,
+                  maxHeight: isMobile ? '45vh' : 'auto',
+                  overflowY: 'auto',
                 }}
               >
                 {/* Header: Icon + Title + Close */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 md:gap-3">
                     <div
-                      className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full shadow-lg"
+                      className="flex-shrink-0 flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full shadow-lg"
                       style={{
                         background: getEdgeColor(lastResult.kind) + '25',
                         border: `1px solid ${getEdgeColor(lastResult.kind)}50`,
@@ -798,12 +800,12 @@ export function BoardCanvas({
                     >
                       {(() => {
                         const RIcon = RELATION_ICONS[lastResult.kind] ?? HelpCircle;
-                        return <RIcon size={16} style={{ color: getEdgeColor(lastResult.kind) }} />;
+                        return <RIcon size={14} style={{ color: getEdgeColor(lastResult.kind) }} />;
                       })()}
                     </div>
                     <div
                       style={{
-                        fontSize: '15px',
+                        fontSize: isMobile ? '13px' : '15px',
                         fontWeight: 800,
                         letterSpacing: '0.02em',
                         color: getEdgeColor(lastResult.kind),
@@ -818,20 +820,20 @@ export function BoardCanvas({
                     className="p-1.5 rounded-lg flex-shrink-0 bg-white/5 hover:bg-white/10 transition-colors"
                     style={{ color: '#D4D4D8' }}
                   >
-                    <X size={16} />
+                    <X size={14} />
                   </button>
                 </div>
 
                 {/* Content */}
                 <div className="w-full">
                   <div
-                    style={{ fontSize: '11px', color: '#A1A1AA', fontWeight: 600, letterSpacing: '0.02em', marginBottom: '8px' }}
+                    style={{ fontSize: isMobile ? '10px' : '11px', color: '#A1A1AA', fontWeight: 600, letterSpacing: '0.02em', marginBottom: '6px' }}
                   >
-                    {lastResult.evidenceA} <span className="text-game-accent mx-1.5">↔</span> {lastResult.evidenceB}
+                    {lastResult.evidenceA} <span className="text-game-accent mx-1">↔</span> {lastResult.evidenceB}
                   </div>
                   <div
                     style={{
-                      fontSize: '13px',
+                      fontSize: isMobile ? '12px' : '13px',
                       color: '#FAFAFA',
                       lineHeight: '1.6',
                       fontWeight: 500,
@@ -847,17 +849,17 @@ export function BoardCanvas({
       </div>
 
       {/* ── Floating Legend HUD (Bottom Left) ── */}
-      <div className="absolute bottom-6 left-6 z-50 flex flex-col-reverse items-start gap-4 pointer-events-none">
+      <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-50 flex flex-col-reverse items-start gap-3 md:gap-4 pointer-events-none">
         <button
           onClick={() => setShowLegend((v) => !v)}
-          className="w-12 h-12 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] pointer-events-auto flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] pointer-events-auto flex items-center justify-center transition-all hover:scale-105 active:scale-95"
           style={{
             background: showLegend ? '#E11D48' : '#09090B',
             color: showLegend ? '#FAFAFA' : '#A1A1AA',
             border: showLegend ? '2px solid #E11D48' : '1px solid rgba(255,255,255,0.1)',
           }}
         >
-          <Eye size={20} />
+          <Eye size={isMobile ? 16 : 20} />
         </button>
 
         <AnimatePresence>
@@ -867,28 +869,28 @@ export function BoardCanvas({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="p-5 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] pointer-events-auto"
+              className="p-4 md:p-5 rounded-xl md:rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.8)] pointer-events-auto"
               style={{
                 background: '#09090B',
                 border: '1px solid rgba(255,255,255,0.1)',
-                minWidth: '220px',
+                minWidth: isMobile ? '180px' : '220px',
               }}
             >
-              <div className="text-[11px] font-bold text-[#FAFAFA] mb-4 tracking-widest uppercase">
+              <div className="text-[10px] md:text-[11px] font-bold text-[#FAFAFA] mb-3 md:mb-4 tracking-widest uppercase">
                 Legenda Korelasi
               </div>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2 md:gap-3">
                 {LEGEND_ITEMS.map((item) => (
-                  <div key={item.kind} className="flex items-center gap-3">
+                  <div key={item.kind} className="flex items-center gap-2 md:gap-3">
                     <div
-                      className="w-3 h-3 rounded-full flex-shrink-0"
+                      className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full flex-shrink-0"
                       style={{ background: getEdgeColor(item.kind), boxShadow: `0 0 10px ${getEdgeColor(item.kind)}60` }}
                     />
                     <div className="min-w-0">
-                      <div className="text-[11px] font-bold tracking-wide" style={{ color: '#FAFAFA' }}>
+                      <div className="text-[10px] md:text-[11px] font-bold tracking-wide" style={{ color: '#FAFAFA' }}>
                         {item.label}
                       </div>
-                      <div className="text-[10px] font-medium" style={{ color: '#71717A' }}>
+                      <div className="text-[9px] md:text-[10px] font-medium" style={{ color: '#71717A' }}>
                         {item.desc}
                       </div>
                     </div>

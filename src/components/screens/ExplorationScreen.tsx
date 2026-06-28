@@ -18,24 +18,25 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
   const exp = scene.exploration;
   if (!exp) return null;
 
-  const charSprite = `/assets/characters/${exp.characterId}/${exp.characterId}_neutral.png`; // Fallback simple sprite logic
+  const charSprite = `/assets/characters/${exp.characterId}/${exp.characterId}_neutral.png`;
 
   return (
     <div className="absolute inset-0 bg-[#09090B] flex flex-col font-body text-[#FAFAFA] overflow-hidden">
       <Background src={`/assets/backgrounds/${scene.background}.jpg`} />
       
       {/* Top Bar */}
-      <div className="absolute top-0 inset-x-0 py-6 pl-6 pr-16 z-20 flex justify-between items-start bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
+      <div className="absolute top-0 inset-x-0 py-4 md:py-6 pl-4 md:pl-6 pr-12 md:pr-16 z-20 flex justify-between items-start bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
         <button
           onClick={onBack}
-          className="pointer-events-auto flex items-center gap-2 text-sm font-semibold hover:text-white transition-colors text-[#A1A1AA] bg-black/40 px-4 py-2 rounded-full backdrop-blur-md border border-white/10"
+          className="pointer-events-auto flex items-center gap-2 text-xs md:text-sm font-semibold hover:text-white transition-colors text-[#A1A1AA] bg-black/40 px-3 md:px-4 py-1.5 md:py-2 rounded-full backdrop-blur-md border border-white/10"
         >
-          <ArrowLeft size={16} />
-          <span>Kembali ke Hub</span>
+          <ArrowLeft size={14} />
+          <span className="hidden md:inline">Kembali ke Hub</span>
+          <span className="md:hidden">Kembali</span>
         </button>
         <div className="text-right">
-          <div className="text-xl font-bold tracking-tight text-white drop-shadow-md">{scene.title}</div>
-          <div className="text-[10px] font-bold text-[#E11D48] tracking-widest uppercase drop-shadow-md">Eksplorasi</div>
+          <div className="text-base md:text-xl font-bold tracking-tight text-white drop-shadow-md">{scene.title}</div>
+          <div className="text-[9px] md:text-[10px] font-bold text-[#E11D48] tracking-widest uppercase drop-shadow-md">Eksplorasi</div>
         </div>
       </div>
 
@@ -44,7 +45,7 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
         <motion.img
           src={charSprite}
           alt={exp.characterId}
-          className="h-[75vh] object-contain drop-shadow-2xl"
+          className="h-[55vh] md:h-[75vh] object-contain drop-shadow-2xl"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -55,7 +56,7 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
       </div>
 
       {/* Action Dashboard */}
-      <div className="absolute bottom-0 inset-x-0 z-30 p-6 md:p-8 bg-gradient-to-t from-black via-black/90 to-transparent">
+      <div className="absolute bottom-0 inset-x-0 z-30 p-4 md:p-6 lg:p-8 bg-gradient-to-t from-black via-black/90 to-transparent">
         <div className="max-w-4xl mx-auto w-full">
           <AnimatePresence mode="wait">
             
@@ -66,17 +67,17 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-4"
+                className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4"
               >
                 <ActionButton
-                  icon={<MessageSquare size={20} />}
+                  icon={<MessageSquare size={18} />}
                   label="Ngomong"
                   desc="Obrolan santai"
                   onClick={() => onAction(exp.talkSceneId)}
                   color="#34D399"
                 />
                 <ActionButton
-                  icon={<Search size={20} />}
+                  icon={<Search size={18} />}
                   label="Investigasi"
                   desc={!visitedSceneIds.includes(exp.talkSceneId) ? 'Terkunci (Ngobrol dulu)' : 'Cari petunjuk'}
                   onClick={() => exp.investigationSceneId && onAction(exp.investigationSceneId)}
@@ -84,7 +85,7 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
                   disabled={!exp.investigationSceneId || !visitedSceneIds.includes(exp.talkSceneId)}
                 />
                 <ActionButton
-                  icon={<Zap size={20} />}
+                  icon={<Zap size={18} />}
                   label="Sodorkan Bukti"
                   desc={!exp.defaultPresentSceneId && !exp.presentEvidenceRoutes ? 'Tidak tersedia di sini' : !visitedSceneIds.includes(exp.talkSceneId) ? 'Terkunci (Ngobrol dulu)' : 'Tekan dengan bukti'}
                   onClick={() => setActiveMenu('present')}
@@ -103,23 +104,23 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="flex flex-col gap-4"
+                className="flex flex-col gap-3 md:gap-4"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <div className="text-sm font-bold text-[#E11D48] tracking-widest uppercase">Sodorkan Bukti</div>
+                  <div className="text-xs md:text-sm font-bold text-[#E11D48] tracking-widest uppercase">Sodorkan Bukti</div>
                   <button onClick={() => setActiveMenu('main')} className="p-2 text-zinc-400 hover:text-white"><X size={20}/></button>
                 </div>
                 
                 {inventory.length === 0 ? (
-                  <div className="p-8 text-center text-zinc-500 italic border border-zinc-800 rounded-2xl bg-zinc-900/50">
+                  <div className="p-6 md:p-8 text-center text-zinc-500 italic border border-zinc-800 rounded-2xl bg-zinc-900/50 text-sm">
                     Belum ada bukti di Case File.
                   </div>
                 ) : (
-                  <div className="flex gap-4 overflow-x-auto pb-4 snap-x">
+                  <div className="flex gap-3 md:gap-4 overflow-x-auto pb-4 snap-x">
                     {inventory.map(item => (
                       <button
                         key={item.id}
-                        className="snap-start flex-shrink-0 w-64 p-4 rounded-xl border border-zinc-800 bg-zinc-900/80 hover:border-[#E11D48] hover:bg-zinc-800 transition-all text-left group"
+                        className="snap-start flex-shrink-0 w-56 md:w-64 p-3 md:p-4 rounded-xl border border-zinc-800 bg-zinc-900/80 hover:border-[#E11D48] hover:bg-zinc-800 transition-all text-left group"
                         onClick={() => {
                           const routeId = exp.presentEvidenceRoutes?.[item.id] || exp.defaultPresentSceneId;
                           if (routeId) onAction(routeId);
@@ -144,7 +145,7 @@ export function ExplorationScreen({ scene, inventory, visitedSceneIds, onAction,
 function ActionButton({ icon, label, desc, onClick, color = '#FAFAFA', disabled = false }: any) {
   return (
     <motion.button
-      className={`group relative p-4 text-left flex flex-col justify-between overflow-hidden rounded-2xl border transition-all h-28 ${
+      className={`group relative p-3 md:p-4 text-left flex flex-col justify-between overflow-hidden rounded-xl md:rounded-2xl border transition-all h-24 md:h-28 ${
         disabled 
           ? 'border-zinc-800 bg-zinc-900/50 opacity-50 cursor-not-allowed' 
           : 'border-zinc-800 bg-zinc-900/80 hover:border-zinc-600 hover:bg-zinc-800'
@@ -155,11 +156,11 @@ function ActionButton({ icon, label, desc, onClick, color = '#FAFAFA', disabled 
     >
       <div className="flex justify-between items-start w-full">
         <div style={{ color: disabled ? '#52525B' : color }}>{icon}</div>
-        {!disabled && <ChevronRight size={16} className="text-zinc-600 group-hover:text-white transition-colors" />}
+        {!disabled && <ChevronRight size={14} className="text-zinc-600 group-hover:text-white transition-colors" />}
       </div>
       <div>
-        <div className="text-sm font-bold mt-2" style={{ color: disabled ? '#52525B' : '#FAFAFA' }}>{label}</div>
-        <div className="text-[10px] text-zinc-500 mt-0.5">{desc}</div>
+        <div className="text-xs md:text-sm font-bold mt-1 md:mt-2" style={{ color: disabled ? '#52525B' : '#FAFAFA' }}>{label}</div>
+        <div className="text-[9px] md:text-[10px] text-zinc-500 mt-0.5">{desc}</div>
       </div>
       
       {/* Background glow on hover */}

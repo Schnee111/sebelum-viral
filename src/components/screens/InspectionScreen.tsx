@@ -62,38 +62,38 @@ export function InspectionScreen({
     <div className="absolute inset-0 bg-[#09090B] flex flex-col font-body text-[#FAFAFA]">
       
       {/* Minimalist Header */}
-      <div className="px-8 pt-8 pb-4 border-b border-[#27272A] flex items-center justify-between">
+      <div className="px-4 md:px-8 pt-4 md:pt-8 pb-3 md:pb-4 border-b border-[#27272A] flex items-center justify-between">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-[10px] font-bold text-[#A1A1AA] hover:text-[#FAFAFA] uppercase tracking-widest transition-colors"
+          className="flex items-center gap-1.5 md:gap-2 text-[9px] md:text-[10px] font-bold text-[#A1A1AA] hover:text-[#FAFAFA] uppercase tracking-widest transition-colors"
         >
           <ArrowLeft size={14} />
           Kembali
         </button>
-        <div className="text-[10px] font-bold text-[#E11D48] tracking-widest uppercase">
+        <div className="text-[9px] md:text-[10px] font-bold text-[#E11D48] tracking-widest uppercase">
           Cross-Check
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-8 py-8 flex flex-col max-w-3xl mx-auto w-full">
+      <div className="flex-1 overflow-y-auto px-4 md:px-8 py-5 md:py-8 flex flex-col max-w-3xl mx-auto w-full">
         
         {/* Claim Block */}
-        <div className="mb-12 border-l-2 border-[#E11D48] pl-6 py-2">
-          <div className="text-[10px] font-bold text-[#71717A] tracking-widest uppercase mb-2 flex items-center gap-2">
+        <div className="mb-8 md:mb-12 border-l-2 border-[#E11D48] pl-4 md:pl-6 py-2">
+          <div className="text-[9px] md:text-[10px] font-bold text-[#71717A] tracking-widest uppercase mb-2 flex items-center gap-2">
             <Search size={12} />
             Subjek Pemeriksaan
           </div>
-          <h3 className="text-xl font-medium leading-relaxed italic text-[#D4D4D8]">
+          <h3 className="text-base md:text-xl font-medium leading-relaxed italic text-[#D4D4D8]">
             "{claimText}"
           </h3>
         </div>
 
-        <div className="text-[10px] font-bold text-[#71717A] tracking-widest uppercase mb-4">
+        <div className="text-[9px] md:text-[10px] font-bold text-[#71717A] tracking-widest uppercase mb-3 md:mb-4">
           Pilih Berkas Referensi
         </div>
 
         {/* Evidence List */}
-        <div className="flex-1 space-y-2 mb-8">
+        <div className="flex-1 space-y-1.5 md:space-y-2 mb-6 md:mb-8">
           {evidences.map((evidence, index) => {
             const isSelected = selectedEvidence === evidence.id;
             return (
@@ -104,7 +104,7 @@ export function InspectionScreen({
                 transition={{ delay: index * 0.05 }}
               >
                 <button
-                  className={`w-full text-left p-4 rounded-xl border flex items-center gap-4 transition-all ${
+                  className={`w-full text-left p-3 md:p-4 rounded-xl border flex items-center gap-3 md:gap-4 transition-all ${
                     isSelected
                       ? 'bg-[#18181B] border-[#E11D48]'
                       : 'bg-[#09090B] border-[#27272A] hover:bg-[#18181B] hover:border-[#3F3F46]'
@@ -114,12 +114,12 @@ export function InspectionScreen({
                     setEvaluationResult(null);
                   }}
                 >
-                  <FileText size={18} className={isSelected ? 'text-[#E11D48]' : 'text-[#71717A]'} />
-                  <div className="flex-1">
-                    <div className={`text-sm font-semibold mb-1 ${isSelected ? 'text-[#FAFAFA]' : 'text-[#D4D4D8]'}`}>
+                  <FileText size={16} className={isSelected ? 'text-[#E11D48]' : 'text-[#71717A]'} />
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-xs md:text-sm font-semibold mb-0.5 md:mb-1 ${isSelected ? 'text-[#FAFAFA]' : 'text-[#D4D4D8]'}`}>
                       {evidence.title}
                     </div>
-                    <div className="text-[10px] text-[#71717A] uppercase tracking-widest">
+                    <div className="text-[9px] md:text-[10px] text-[#71717A] uppercase tracking-widest">
                       Sumber: {evidence.source}
                     </div>
                   </div>
@@ -136,20 +136,20 @@ export function InspectionScreen({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden mb-8"
+              className="overflow-hidden mb-6 md:mb-8"
             >
               {(() => {
                 const config = VERDICT_CONFIG[evaluationResult.verdict as keyof typeof VERDICT_CONFIG];
                 if (!config) return null;
                 const Icon = config.icon;
                 return (
-                  <div className="p-6 bg-[#18181B] rounded-xl border border-[#27272A] flex items-start gap-4">
-                    <Icon size={20} className={config.color} />
+                  <div className="p-4 md:p-6 bg-[#18181B] rounded-xl border border-[#27272A] flex items-start gap-3 md:gap-4">
+                    <Icon size={18} className={config.color} />
                     <div>
-                      <div className={`text-[10px] font-bold tracking-widest mb-2 ${config.color}`}>
+                      <div className={`text-[9px] md:text-[10px] font-bold tracking-widest mb-1.5 md:mb-2 ${config.color}`}>
                         {config.label}
                       </div>
-                      <div className="text-sm text-[#D4D4D8] leading-relaxed">
+                      <div className="text-xs md:text-sm text-[#D4D4D8] leading-relaxed">
                         {evaluationResult.feedback}
                       </div>
                     </div>
@@ -164,7 +164,7 @@ export function InspectionScreen({
         <button
           onClick={handleEvaluate}
           disabled={!selectedEvidence}
-          className={`w-full py-4 rounded-full font-bold text-[11px] tracking-widest uppercase transition-all ${
+          className={`w-full py-3 md:py-4 rounded-full font-bold text-[10px] md:text-[11px] tracking-widest uppercase transition-all ${
             selectedEvidence
               ? 'bg-[#FAFAFA] text-[#09090B] hover:bg-[#E4E4E7]'
               : 'bg-[#18181B] text-[#71717A] cursor-not-allowed border border-[#27272A]'

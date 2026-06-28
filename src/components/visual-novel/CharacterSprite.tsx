@@ -8,9 +8,9 @@ interface CharacterSpriteProps {
 }
 
 const POSITION_MAP = {
-  left: 'left-[10%] md:left-[15%]',
+  left: 'left-[2%] md:left-[15%]',
   center: 'left-1/2 -translate-x-1/2',
-  right: 'right-[10%] md:right-[15%]',
+  right: 'right-[2%] md:right-[15%]',
 } as const;
 
 export function CharacterSprite({
@@ -38,7 +38,7 @@ export function CharacterSprite({
         <img
           src={src}
           alt=""
-          className="h-[75vh] max-h-[800px] w-auto object-contain object-bottom drop-shadow-2xl"
+          className="h-[55vh] md:h-[75vh] max-h-[800px] w-auto object-contain object-bottom drop-shadow-2xl"
           style={{
             maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
             WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
