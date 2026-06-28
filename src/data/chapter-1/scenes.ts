@@ -791,7 +791,10 @@ export const scenes: Scene[] = [
       presentEvidenceRoutes: {
         'EV_CH1_006': 'LOC_MADING_PRESENT_LOG'
       },
-      interrogationScenes: ['LOC_MADING_INTEROGASI_SOFT']
+      interrogationScenes: {
+        soft: 'LOC_MADING_INTEROGASI_SOFT',
+        hard: 'LOC_MADING_INTEROGASI_SOFT'
+      }
     }
   },
   {
